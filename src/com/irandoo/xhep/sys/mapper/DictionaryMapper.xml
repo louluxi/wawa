@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.sys.mapper.DictionaryMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Dictionary" id="dictionaryMap">
+		<id property="id" column="id"/>
+		<result property="dictId" column="dictId"/>
+		<result property="dictName" column="dictName"/>
+		<result property="dictType" column="dictType"/>
+		<result property="descript" column="descript"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+	</resultMap>
+	
+	<select id="getInfoList" parameterType="map" resultMap="dictionaryMap">
+		 SELECT a.*
+		 	FROM t_dictbuss a
+			    <where>
+			    	<if test="dictId != null and dictId != ''" >
+				        AND a.dictId like '%${dictId}%'
+				     </if>
+				     <if test="dictName != null and dictName != ''" >
+				        AND a.dictName like '%${dictName}%'
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+			 FROM t_dictbuss a 
+			    <where>
+			    	<if test="dictId != null and dictId != ''" >
+				        AND a.dictId like '%${dictId}%'
+				     </if>
+				     <if test="dictName != null and dictName != ''" >
+				        AND a.dictName like '%${dictName}%'
+				     </if>
+			    </where>
+	</select>
+	
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Dictionary">
+		SELECT a.*
+		 	FROM t_dictbuss a 
+		 WHERE a.id = #{id}
+	</select>
+	
+	<select id="getInfoByDescriptAndDictName" parameterType="map" resultMap="dictionaryMap">
+		SELECT a.*
+		 	FROM t_dictbuss a 
+		 WHERE a.descript = #{descript} AND a.dictName = #{dictName}
+	</select>
+	
+	<select id="getInfoByDescript" parameterType="map" resultMap="dictionaryMap">
+		SELECT a.*
+		 	FROM t_dictbuss a 
+		 WHERE a.descript like '%${descript}%'
+	</select>
+	
+	<select id="getAllList" parameterType="map" resultMap="dictionaryMap">
+		SELECT a.*
+		 	FROM t_dictbuss a
+		 order by a.id desc 
+	</select>
+	<insert id="insert" parameterType="com.irandoo.xhep.base.model.Dictionary">
+		INSERT INTO t_dictbuss
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="dictId != null and dictId != ''" >
+	        dictId,
+	      </if>
+	      <if test="dictName != null and dictName != ''" >
+	        dictName,
+	      </if>
+	      <if test="dictType != null and dictType != ''" >
+	        dictType,
+	      </if>
+	      <if test="descript != null and descript != ''" >
+	        descript,
+	      </if>
+	        update_timestamp
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="dictId != null and dictId != ''" >
+	         #{dictId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dictName != null and dictName != ''" >
+	         #{dictName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dictType != null and dictType != ''" >
+	         #{dictType,jdbcType=INTEGER},
+	      </if>
+	      <if test="descript != null and descript != ''" >
+	         #{descript,jdbcType=VARCHAR},
+	      </if>
+	         now()
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.xhep.base.model.Dictionary">
+		UPDATE t_dictbuss
+		<set>
+		 <if test="dictId != null and dictId != ''" >
+	         dictId = #{dictId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dictName != null and dictName != ''" >
+	         dictName = #{dictName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="dictType != null and dictType != ''" >
+	         dictType = #{dictType,jdbcType=INTEGER},
+	      </if>
+	      <if test="descript != null and descript != ''" >
+	         descript = #{descript,jdbcType=VARCHAR},
+	      </if>
+	         update_timestamp = now()
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM t_dictbuss WHERE id = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.support.alipay.mapper.AliPayUserAccountMapper">
+    <select id="getInfoById" parameterType="long" resultType="com.irandoo.support.alipay.model.AliPayUserAccount">
+        SELECT a.*
+            FROM t_user_account a 
+         WHERE a.ACCOUNT_TYPE=1 and a.user_id = #{user_id}
+    </select>
+    <update id="update" parameterType="com.irandoo.support.alipay.model.AliPayUserAccount">
+        UPDATE t_user_account
+         <set>
+         <if test="balance != null and balance != ''" >
+            balance = #{balance,jdbcType=BIGINT},
+          </if>
+        </set>
+        WHERE id = #{id} and account_type = '1'
+    </update>
+</mapper>

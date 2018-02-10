@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.support.alipay.mapper.AliPayMealMapper">
+    <select id="getInfoById" parameterType="long" resultType="com.irandoo.support.alipay.model.AliPayMeal">
+        SELECT a.*
+            FROM t_meal a 
+         WHERE a.id = #{id}
+    </select>
+</mapper>

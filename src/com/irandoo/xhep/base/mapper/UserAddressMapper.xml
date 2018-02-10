@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.UserAddressMapper">
+	<resultMap type="com.irandoo.xhep.base.model.UserAddress" id="UserAddressMap">
+		<id property="id" column="id"/>
+		<result property="user_id" column="user_id"/>
+		<result property="country" column="country"/>
+		<result property="province" column="province"/>
+		<result property="city" column="city"/>
+		<result property="area" column="area"/>
+		<result property="detail" column="detail"/>
+		<result property="receiver" column="receiver"/>
+		<result property="tel" column="tel"/>
+		<result property="is_default" column="is_default"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="UserAddressMap">
+		 SELECT a.*
+		 	FROM t_user_address a 
+			    <where>
+			    	1=1
+			    	<if test="user_id != null and user_id != ''" >
+				        AND a.user_id = #{user_id}
+				     </if>
+			    	<if test="country != null and country != ''" >
+				        AND a.country = #{country}
+				     </if>
+				     <if test="province != null and province != ''" >
+				        AND a.province = #{province}
+				     </if>
+				     <if test="city != null and city != ''" >
+				        AND a.city = #{city}
+				     </if>
+				      <if test="receiver != null and receiver != ''" >
+				        AND a.receiver = #{receiver}
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_user_address a 
+		    <where>
+			    	1=1
+			    	<if test="user_id != null and user_id != ''" >
+				        AND a.user_id = #{user_id}
+				     </if>
+			    	<if test="country != null and country != ''" >
+				        AND a.country = #{country}
+				     </if>
+				     <if test="province != null and province != ''" >
+				        AND a.province = #{province}
+				     </if>
+				     <if test="city != null and city != ''" >
+				        AND a.city = #{city}
+				     </if>
+				      <if test="receiver != null and receiver != ''" >
+				        AND a.receiver = #{receiver}
+				     </if>
+			    </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_user_address WHERE id = #{id}
+    </delete>
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.UserAddress">
+        SELECT a.*
+            FROM t_user_address a 
+         WHERE a.id = #{id}
+    </select>
+    <update id="update" parameterType="com.irandoo.xhep.base.model.UserAddress">
+        UPDATE t_user_address
+        <set>
+          <if test="user_id != null and user_id != ''" >
+            user_id = #{user_id,jdbcType=BIGINT},
+          </if>
+          <if test="country != null and country != ''" >
+            country = #{country,jdbcType=VARCHAR},
+          </if>
+          <if test="province != null and province != ''" >
+            province = #{province,jdbcType=VARCHAR},
+          </if>
+          <if test="city != null and city != ''" >
+            city = #{city,jdbcType=VARCHAR},
+          </if>
+          <if test="area != null and area != ''" >
+            area = #{area,jdbcType=VARCHAR},
+          </if>
+          <if test="detail != null and detail != ''" >
+            detail = #{detail,jdbcType=VARCHAR},
+          </if>
+          <if test="receiver != null and receiver != ''" >
+            receiver = #{receiver,jdbcType=VARCHAR},
+          </if>
+         <if test="tel != null and tel != ''" >
+            tel = #{tel,jdbcType=VARCHAR},
+          </if>
+          <if test="is_default != null and is_default != ''" >
+            is_default = #{is_default,jdbcType=VARCHAR},
+          </if>
+          <if test="create_time != null and create_time != ''" >
+            create_time = #{create_time,jdbcType=DATE},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=VARCHAR},
+          </if>       
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.UserAddress" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user_address
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="user_id != null and user_id != ''" >
+            user_id,
+          </if>
+          <if test="country != null and country != ''" >
+            country,
+          </if>
+          <if test="province != null and province != ''" >
+            province,
+          </if>
+          <if test="city != null and city != ''" >
+            city,
+          </if>
+          <if test="area != null and area != ''" >
+            area,
+          </if>
+          <if test="detail != null and detail != ''" >
+            detail,
+          </if>
+          <if test="receiver != null and receiver != ''" >
+            receiver,
+          </if>
+          <if test="tel != null and tel != ''" >
+            tel,
+          </if>
+           <if test="is_default != null and is_default != ''" >
+            is_default,
+          </if>      
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="user_id != null and user_id != ''" >
+            #{user_id,jdbcType=BIGINT},
+          </if>
+          <if test="country != null and country != ''" >
+            #{country,jdbcType=VARCHAR},
+          </if>
+          <if test="province != null and province != ''" >
+            #{province,jdbcType=VARCHAR},
+          </if>
+          <if test="city != null and city != ''" >
+            #{city,jdbcType=VARCHAR},
+          </if>
+           <if test="area != null and area != ''" >
+            #{area,jdbcType=VARCHAR},
+          </if>
+          <if test="detail != null and detail != ''" >
+            #{detail,jdbcType=VARCHAR},
+          </if>
+           <if test="receiver != null and receiver != ''" >
+            #{receiver,jdbcType=VARCHAR},
+          </if>
+          <if test="tel != null and tel != ''" >
+            #{tel,jdbcType=VARCHAR},
+          </if>
+            <if test="is_default != null and is_default != ''" >
+            #{is_default,jdbcType=VARCHAR},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+</mapper>

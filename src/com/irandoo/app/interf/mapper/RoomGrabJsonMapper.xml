@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.RoomGrabJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.RoomGrabJson">
+		 SELECT  b.id AS userId,
+				b.NICK_NAME AS nickName,
+				b.USER_ICON AS userIcon,
+				d.room_code AS roomCode,
+				c.id AS merchId,
+				c.merch_name AS merchName,
+				a.sale_code AS saleCode,
+				a.grab_time AS grabTime,
+				a.snapid AS snapid,
+				a.game_type AS gameType,
+				a.room_id AS roomId,
+				a.status AS status
+		FROM t_grab_record a
+		INNER JOIN t_user b ON a.user_id = b.id
+		INNER JOIN t_merch c ON a.merch_id = c.id
+		INNER JOIN t_room d ON a.room_id = d.id
+		WHERE 1=1
+		<if test="null != roomId and '' != roomId">
+			AND a.ROOM_id = #{roomId}
+		</if>
+		<if test="null != snapid and '' != snapid">
+			AND a.snapid = #{snapid}
+		</if>
+		<if test="null != status and '' != status">
+			AND a.status = #{status}
+		</if>
+		<if test="null != checkTime and '' != checkTime">
+			AND TIMESTAMPDIFF(MINUTE,a.grab_time,now()) >= #{checkTime} ORDER BY a.grab_time DESC LIMIT 1
+		</if>
+		<if test="null != startset and null !=endset">
+		limit #{startset},#{endset}
+		</if>
+	</select>
+	
+	<select id="getRoomGrabList" parameterType="map" resultType="com.irandoo.app.interf.json.RoomGrabJson">
+			 SELECT  b.id AS userId,
+				b.NICK_NAME AS nickName,
+				b.USER_ICON AS userIcon,
+				c.id AS merchId,
+				c.merch_name AS merchName,
+				a.sale_code AS saleCode,
+				a.grab_time AS grabTime,
+				a.snapid AS snapid,
+				a.game_type AS gameType,
+				a.room_id AS roomId,
+				a.status AS status
+		FROM t_grab_record a
+		INNER JOIN t_user b ON a.user_id = b.id
+		INNER JOIN t_merch c ON a.merch_id = c.id
+		WHERE  a.status=1 
+		<if test="null != roomId and '' != roomId">
+			AND a.ROOM_id = #{roomId}
+		</if>
+		ORDER BY a.grab_time DESC LIMIT 20
+	</select>
+		
+	<select id="getBySnapId" parameterType="map" resultType="com.irandoo.app.interf.json.RoomGrabJson">
+		 SELECT a.sale_code AS saleCode,
+				a.grab_time AS grabTime,
+				b.room_code AS roomCode,
+				a.game_type AS gameType,
+				a.id AS id,
+				a.room_id AS roomId,
+				a.user_id AS userId,
+				a.merch_id AS merchId,
+				a.snapid AS snapid,
+				a.status AS status
+		FROM t_grab_record a
+		INNER JOIN t_room b ON a.room_id = b.id
+		WHERE 1= 1
+		<if test="null != userId and '' != userId">
+			AND a.user_id = #{userId}
+		</if>
+		<if test="null != snapid and '' != snapid">
+			AND a.snapid = #{snapid}
+		</if>
+		ORDER BY a.grab_time DESC LIMIT 1
+	</select>
+	
+	<insert id="insert" parameterType="com.irandoo.app.interf.json.RoomGrabJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_grab_record
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="userId != null and userId != ''" >
+	        user_id,
+	      </if>
+	      <if test="saleCode != null and saleCode != ''" >
+	        sale_code,
+	      </if>
+	      <if test="grabTime != null and grabTime != ''" >
+	        grab_time,
+	      </if>
+	      <if test="snapid != null and snapid != ''" >
+	        snapid,
+	      </if>
+	      <if test="status != null and status != ''" >
+	        status,
+	      </if>
+	      <if test="gameType != null and gameType != ''" >
+	        GAME_TYPE,
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        room_id,
+	      </if>
+	      merch_id
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="userId != null and userId != ''" >
+	        #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="saleCode != null and saleCode != ''" >
+	        #{saleCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="grabTime != null and grabTime != ''" >
+	        #{grabTime,jdbcType=VARCHAR},
+	      </if>
+	      <if test="snapid != null and snapid != ''" >
+	        #{snapid,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	        #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="gameType != null and gameType != ''" >
+	        #{gameType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        #{roomId,jdbcType=VARCHAR},
+	      </if>
+	      (SELECT merch_id FROM t_room_merch WHERE room_id = #{roomId} LIMIT 1)
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.app.interf.json.RoomGrabJson">
+		UPDATE t_grab_record
+		<set>
+	      <if test="userId != null and userId != ''" >
+	        user_id = #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchId != null and merchId != ''" >
+	        merch_id = #{merchId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="saleCode != null and saleCode != ''" >
+	        sale_code = #{saleCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="grabTime != null and grabTime != ''" >
+	        grab_time = #{grabTime,jdbcType=VARCHAR},
+	      </if>
+	      <if test="snapid != null and snapid != ''" >
+	        snapid = #{snapid,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	        status = #{status,jdbcType=VARCHAR},
+	      </if>
+	       <if test="gameType != null and gameType != ''" >
+	        game_type = #{gameType,jdbcType=VARCHAR},
+	      </if>
+	       <if test="roomId != null and roomId != ''" >
+	        room_id = #{roomId,jdbcType=VARCHAR}
+	      </if>
+		</set>
+		WHERE snapid = #{snapid}
+	</update>
+</mapper>

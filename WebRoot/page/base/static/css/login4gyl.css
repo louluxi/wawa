@@ -1,0 +1,578 @@
+body{
+    padding-top:80px;
+}
+.footer{
+    margin-top:0;
+}
+/*鐧诲綍 start*/
+.login-wrap,.regist-wrap{
+    background:url("../image/login-bg-gyl.jpg") no-repeat center top;
+    overflow:hidden;
+    background-size:cover;
+    /*position:relative;*/
+}
+/*.login-body-bg{*/
+/*position:absolute;*/
+/*left:0;*/
+/*top:0;*/
+/*width:100%;*/
+/*height:100%;*/
+/*overflow:hidden;*/
+/*}*/
+/*.login-body-bg .login-img{*/
+/*width:1920px;*/
+/*height:100%;*/
+/*position:absolute;*/
+/*left:50%;*/
+/*top:0;*/
+/*margin-left:-960px;*/
+/*}*/
+.login-con{
+    margin:0 auto;
+    width:400px;
+    height:auto;
+    color:#fff;
+}
+.login-con .login-tit{
+    text-align:center;
+    font-size:32px;
+    text-align:center;
+    line-height:60px;
+}
+.login-input{
+    position:relative;
+}
+.login-input .null_meg{
+    top:10px;
+    left:34px;
+}
+.login-body .value{
+    width:100%;
+    height:46px;
+    border:0;
+    padding:10px 34px;
+    font-size:14px;
+    color:#2a2a2a;
+    background:#fff;
+    overflow:hidden;
+
+    margin-top:10px;
+    line-height:26px;
+}
+.login-body .value.red-bg{
+    background:#ffdfdf;
+}
+.login-body .password-operation{
+    height:60px;
+    line-height:60px;
+    padding:0 10px 0 30px;
+    font-size:14px;
+}
+.login-body .password-operation .remember{
+    float:left;
+    position:relative;
+}
+.login-body .password-operation .remember input{
+    filter:alpha(opacity=0);
+    opacity:0;
+    position:absolute;
+    left:0;
+    top:0;
+}
+.login-body .password-operation .icon{
+    position:absolute;
+    left:0;
+    bottom:0;
+    font-size:16px;
+    line-height:16px;
+    cursor:pointer;
+}
+.login-body .password-operation .forget-paswd{
+    float:right;
+    color:#fff;
+}
+.login-body .login-btn{
+    height:50px;
+    line-height:50px;
+    background:#23abe7;
+    border:0;
+    text-align:center;
+    font-size:18px;
+    display:block;
+    width:100%;
+    margin-bottom:50px;
+}
+.login-body .login-btn.dis{
+    background:#848484;
+}
+/*鐧诲綍 end*/
+/*娉ㄥ唽 start*/
+/*.regist-wrap{
+    padding-bottom:100px;
+}*/
+.new-password{
+    padding:0;
+}
+.regist-con{
+    width:370px;
+    margin:30px auto;
+}
+.regist-tit{
+
+    height:60px;
+    line-height:58px;
+    text-align:center;
+    font-size:32px;
+
+    color:#fff;
+
+}
+.regist-body .tab-hd{
+    height:70px;
+    padding:10px 0;
+    font-size:14px;
+    color:#fff;
+}
+.regist-body .tab-hd .item{
+    width:50%;
+    height:100%;
+    line-height:46px;
+    text-align:center;
+    cursor:pointer;
+    float:left;
+    position:relative;
+}
+.regist-body .tab-hd input{
+    position:absolute;
+    left:0;
+    top:0;
+    filter:alpha(opacity=0);
+    opacity: 0;
+}
+.regist-body .tab-hd .radio-bd{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#fff;
+    line-height:10px;
+    text-align:center;
+    display:inline-block;
+    vertical-align: middle;
+    margin-right:6px;
+}
+.regist-body .tab-hd .circle{
+    width:10px;
+    height:10px;
+    background:transparent;
+    /*border:1px solid #d8d8d8;*/
+    display:inline-block;
+    border-radius:50%;
+    /*vertical-align:middle;*/
+    float:left;
+    margin:2px 0 0 2px;
+}
+.regist-body .tab-hd .item.current .circle{
+    background:#2dafe8;
+}
+.regist-body .tab-hd .tab-right{
+    float:left;
+    width:370px;
+    border-radius:8px;
+    border:2px solid #fff;
+}
+.regist-body .tab-ft{
+    height:44px;
+    padding:10px 0 0 0;
+}
+.regist-body .tab-ft .tab-right{
+    border:0;
+}
+.regist-body .tab-ft .item{
+    line-height:34px;
+}
+.regist-body .tab-ft  .checkbox-bd{
+    margin-right:6px;
+}
+.regist-body .tab-ft .icon{
+    bottom: 0;
+    font-size: 16px;
+    left: 0;
+    line-height: 16px;
+    position: absolute;
+    display:none;
+}
+.regist-body .tab-ft .icon.current{
+    display:block;
+}
+.regist-body .value-con{
+    margin-top:10px;
+    height:42px;
+    font-size:14px;
+    /*position:relative;*/
+}
+.regist-body .value-con:first-child{
+    margin-top:0;
+}
+.regist-body .value-con .left,.regist-body .tab-hd .left{
+    /*float:left;*/
+    width:30px;
+    height:100%;
+    line-height:46px;
+    color:#fff;
+    font-size:30px;
+    color:#ffd7d7;
+}
+.regist-body .value-con .value{
+    float:left;
+    width:370px;
+    height:100%;
+    border:0;
+
+    padding:10px 28px;
+    color:#2a2a2a;
+    line-height:20px;
+    /*position:relative;*/
+}
+.regist-body .tel-con .value{
+    background:#fff!important;
+}
+.regist-body .value-con .value.red-bg{
+    background:#ffdfdf;
+}
+/* placeholder 瀛椾綋鍙樼孩  start */
+.regist-body .value-con .value.red-bg:-moz-placeholder{
+    color:#f00!important;
+}
+.regist-body .value-con .value.red-bg::-moz-placeholder{
+    color:#f00!important;
+}
+.regist-body .value-con .value.red-bg::-webkit-input-placeholder{
+    color:#f00!important;
+}
+.regist-body .value-con .value.red-bg:-ms-input-placeholder{
+    color:#f00!important;
+}
+/*denglu*/
+.login-body .value.red-bg:-moz-placeholder{
+    color:#f00!important;
+}
+.login-body .value.red-bg::-moz-placeholder{
+    color:#f00!important;
+}
+.login-body .value.red-bg::-webkit-input-placeholder{
+    color:#f00!important;
+}
+.login-body .value.red-bg:-ms-input-placeholder{
+    color:#f00!important;
+}
+.null_meg{
+    position: absolute;
+    color:#f00;
+    width:25.1%;
+    height:6.5%;
+    line-height:46px;
+    overflow:hidden;
+    font-size:14px;
+}
+#firstPage .null_meg{
+    width:25.8%;
+    left:38.5%;
+}
+#secondPage-left .null_meg{
+    left:22%;
+}
+#secondPage-right .null_meg{
+    left:55%;
+}
+.null_meg b{
+    float:left;
+}
+.null_meg b.xing{
+    font-size:30px;
+    line-height:54px;
+}
+/* placeholder 瀛椾綋鍙樼孩 end */
+.regist-body .code-con .value{
+    width:200px;
+    margin-right:8px;
+}
+.regist-body .code-con .send-code{
+    float:left;
+    width:160px;
+    height:100%;
+    line-height:46px;
+    background:#848484;
+    color:#fff;
+    text-align:center;
+    cursor:pointer;
+   /* border-radius:8px;*/
+}
+.regist-body .protocol{
+    font-size:18px;
+    padding-left:72px;
+    height:72px;
+    line-height:72px;
+    color:#fff;
+    position:relative;
+    display:none;
+}
+.regist-body .protocol .user-agreement{
+    color:#0d5e82;
+    cursor:pointer;
+}
+.regist-body .protocol input{
+    left: 0;
+    filter:alpha(opacity=0);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+}
+.regist-body .protocol .icon{
+    bottom: 0;
+    font-size: 16px;
+    left: 0;
+    line-height: 16px;
+    position: absolute;
+    display:none;
+}
+.regist-body .confirm-btn{
+    height:50px;
+    line-height:50px;
+    text-align:center;
+    font-size:16px;
+    color:#fff;
+    background:#848484;
+    display:block;
+    border:0;
+    width:370px;
+    margin:15px 0;
+
+}
+.regist-body .confirm-btn.current,.regist-body .code-con .send-code.current{
+    background:#23abe7;
+}
+.forget-paswd-con .regist-tit{
+    border-bottom:0;
+}
+.forget-paswd-con .confirm-btn{
+    margin-top:20px;
+}
+.forget-paswd-con .confirm-btn.current{
+    background:#facd00;
+}
+.pop-user-agreement .user-agreement-wrap{
+    width:64.3%;
+    margin-left:-34.7%;
+
+}
+.pop-user-agreement .con-wrap{
+    height: 404px;
+    padding-top:20px;
+    margin-top:-202px;
+
+}
+.user-agreement-wrap .pop-tit{
+    border:0;
+    font-size: 30px;
+    height: 50px;
+    line-height: 50px;
+}
+.user-agreement-wrap .con{
+    padding:0 5.17%;
+    height:250px;
+    overflow:auto;
+    font-size:18px;
+    line-height:28px;
+    color:#666;
+}
+.user-agreement-wrap .confirm{
+    margin:20px auto;
+    display:block;
+    width:198px;
+    height:44px;
+    line-height:44px;
+    font-size:18px;
+    color:#fff;
+    text-align:center;
+    background:#2dafe8;
+    float:none;
+    cursor:pointer;
+}
+.pop-psw-wrap .txt,.pop-username-wrap .txt,.pop-message-wrap .txt,.pop-tel-wrap .txt{
+    padding: 20px 6px;
+}
+
+
+/*media*/
+@media (max-width: 992px) {
+    body{
+        padding-top:0;
+    }
+    .head-wrap{
+        position:static;
+    }
+    .login-con{
+        width:100%;
+        padding:0 1rem;
+        margin-top:2rem!important;
+    }
+    .login-con .login-tit{
+        font-size: 1.7rem;
+        line-height:3.5rem;
+    }
+    .login-body .value{
+        border-radius:0.4rem;
+        font-size:1.2rem;
+        height:4rem;
+        margin-top:1.5rem;
+        padding:0.6rem 1.7rem;
+        line-height:2.8rem;
+    }
+    .login-body .password-operation{
+        font-size: 1rem;
+        height:5rem;
+        line-height:5rem;
+        padding: 0 0.5rem 0 1.5rem;
+    }
+    .login-body .password-operation .icon{
+        font-size: 1rem;
+    }
+    .login-body .login-btn{
+        border-radius:0.4rem;
+        font-size: 1.5rem;
+        font-size: 1.5rem;
+        height: 4rem;
+        line-height: 4rem;
+        margin-bottom:4rem;
+    }
+
+    /*娉ㄥ唽 寮�濮�*/
+
+    .regist-wrap{
+        padding:1rem 0 2rem;
+    }
+    .regist-con{
+        width:100%;
+    }
+    .regist-tit{
+        font-size:1.7rem;
+        height: 4rem;
+        line-height:4rem;
+        width:87.5%;
+        margin:0 auto;
+    }
+    .regist-body .tab-hd{
+        font-size:1.2rem;
+        height:6rem;
+        padding:1rem;
+    }
+    .regist-body .tab-ft{
+        height:3rem;
+        padding:0;
+    }
+    .regist-body .tab-ft .icon{
+        font-size:1rem;
+    }
+    .regist-body .tab-hd .item{
+        line-height:4rem;
+    }
+    .regist-body .tab-hd .radio-bd{
+        height: 1rem;
+        line-height: 1rem;
+        width: 1rem;
+        margin-right:0.5rem;
+    }
+    .regist-body .tab-hd .circle{
+        height: 0.6rem;
+        width: 0.6rem;
+        margin:0.2rem 0 0 0.2rem;
+    }
+
+    .regist-body .value-con{
+        font-size: 1.2rem;
+        height: 4rem;
+        margin-top:1rem;
+        padding:0 1rem;
+    }
+
+    .regist-body .value-con .left,.regist-body .tab-hd .left{
+        font-size: 1.5rem;
+        line-height: 4rem;
+        width: 6.25%;
+    }
+    .regist-body .tab-hd .tab-right{
+        width:87.5%;
+        border-radius:0.4rem;
+    }
+    .regist-body .value-con .value{
+        border-radius: 0.4rem;
+        padding: 0.8rem 1.4rem;
+        width: 87.5%;
+        line-height:2.4rem;
+    }
+    .regist-body .code-con .value{
+        margin-right: 0.4rem;
+        width:42%;
+    }
+    .regist-body .code-con .send-code{
+        line-height: 3rem;
+        width: 44%;
+    }
+    .null_meg {
+        left: 14%;
+        line-height: 4rem;
+        font-size:1.2rem;
+    }
+    .null_meg b.xing {
+        font-size: 1.2rem;
+        line-height: 4rem;
+    }
+
+    .regist-body .protocol{
+        font-size: 1rem;
+        height:3.6rem;
+        line-height: 3.6rem;
+        padding-left: 3.5rem;
+    }
+    .regist-body .protocol .icon{
+        font-size: 0.8rem;
+        line-height: 0.8rem;
+    }
+    .regist-body .confirm-btn{
+        border-radius: 0.4rem;
+        font-size: 1.5rem;
+        height: 4rem;
+        line-height:4rem;
+        width: 83.5%;
+        margin:1rem 1rem 0 8%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

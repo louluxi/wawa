@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.VersionMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Version" id="VersionMap">
+		<id property="id" column="id"/>
+		<result property="version_code" column="version_code"/>
+		<result property="version_child_code" column="version_child_code"/>
+		<result property="platform" column="platform"/>
+		<result property="download_url" column="download_url"/>
+		<result property="tag" column="tag"/>
+		<result property="status" column="status"/>
+		<result property="create_time" column="create_time"/>
+		<result property="corp_code" column="corp_code"/>
+		<result property="statusShow" column="statusShow"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="VersionMap">
+		 SELECT a.*,
+		    b.DICTNAME AS statusShow
+		 	FROM t_version a 
+		 	LEFT JOIN t_dictbuss b ON a.status = b.DICTID AND b.DESCRIPT = '版本状态'
+			    <where>
+			    	1=1
+				     <if test="version_code != null and version_code != ''" >
+				        and a.version_code  like "%"#{version_code}"%" 
+				     </if>
+				     <if test="version_child_code != null and version_child_code != ''" >
+                        and a.version_child_code  like "%"#{version_child_code}"%" 
+                     </if>
+                     <if test="download_url != null and download_url != ''" >
+                        and a.download_url  like "%"#{download_url}"%" 
+                     </if>
+				     <if test="status != null and status != ''" >
+                        and a.status = #{status}
+                     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+            FROM t_version a 
+            LEFT JOIN t_dictbuss b ON a.status = b.DICTID AND b.DESCRIPT = '版本状态'
+		      <where>
+                    1=1
+                     <if test="version_code != null and version_code != ''" >
+                        and a.version_code  like "%"#{version_code}"%" 
+                     </if>
+                     <if test="version_child_code != null and version_child_code != ''" >
+                        and a.version_child_code  like "%"#{version_child_code}"%" 
+                     </if>
+                     <if test="download_url != null and download_url != ''" >
+                        and a.download_url  like "%"#{download_url}"%" 
+                     </if>
+                     <if test="status != null and status != ''" >
+                        and a.status = #{status}
+                     </if>
+                </where>
+	</select>
+	
+	 <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Version">
+        SELECT a.*
+            FROM t_version a 
+         WHERE a.id = #{id}
+    </select>
+    <delete id="delete" parameterType="long">
+        DELETE FROM t_version WHERE id = #{id}
+    </delete>
+	<update id="update" parameterType="com.irandoo.xhep.base.model.Version">
+        UPDATE t_version
+        <set>
+          <if test="version_code != null and version_code != ''" >
+            version_code = #{version_code,jdbcType=VARCHAR},
+          </if>
+          <if test="version_child_code != null and version_child_code != ''" >
+            version_child_code = #{version_child_code,jdbcType=VARCHAR},
+          </if>
+          <if test="platform != null and platform != ''" >
+            platform = #{platform,jdbcType=VARCHAR},
+          </if>
+          <if test="download_url != null and download_url != ''" >
+            download_url = #{download_url,jdbcType=VARCHAR},
+          </if>
+          <if test="tag != null and tag != '' " >
+            tag = #{tag,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null and status != '' " >
+            status = #{status,jdbcType=VARCHAR},
+          </if>
+           <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=VARCHAR},
+          </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+     <insert id="insert" parameterType="com.irandoo.xhep.base.model.Version" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_version
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="version_code != null and version_code != ''" >
+            version_code,
+          </if>
+          <if test="version_child_code != null and version_child_code != ''" >
+            version_child_code,
+          </if>
+          <if test="platform != null and platform != ''" >
+            platform,
+          </if>
+          <if test="download_url != null and download_url != ''" >
+            download_url,
+          </if>
+          <if test="tag != null and tag != ''" >
+            tag,
+          </if>
+          <if test="status != null and status != ''" >
+            status,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+         <if test="version_code != null and version_code != ''" >
+             #{version_code,jdbcType=VARCHAR},
+          </if>
+          <if test="version_child_code != null and version_child_code != ''" >
+             #{version_child_code,jdbcType=BIGINT},
+          </if>
+          <if test="platform != null and platform != ''" >
+             #{platform,jdbcType=VARCHAR},
+          </if>
+          <if test="download_url != null and download_url != ''" >
+             #{download_url,jdbcType=VARCHAR},
+          </if>
+          <if test="tag != null and tag != ''" >
+             #{tag,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null and status != ''" >
+            #{status,jdbcType=BIGINT},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+             now()
+        </trim>
+    </insert>
+</mapper>

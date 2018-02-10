@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.UserOrderMapper">
+	<resultMap type="com.irandoo.xhep.base.model.UserOrder" id="UserOrderMap">
+		<id property="id" column="id"/>
+		<result property="user_id" column="user_id"/>
+		<result property="order_type" column="order_type"/>
+		<result property="order_code" column="order_code"/>
+		<result property="merch_id" column="merch_id"/>
+		<result property="sale_code" column="sale_code"/>
+		<result property="address_id" column="address_id"/>
+		<result property="status" column="status"/>
+		<result property="express_no" column="express_no"/>
+		<result property="express_company" column="express_company"/>
+		<result property="send_user_id" column="send_user_id"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+	    <result property="nick_name" column="nick_name"/>
+	    <result property="user_code" column="user_code"/>
+	    <result property="wechat" column="wechat"/>
+	    <result property="merch_name" column="merch_name"/>
+	    <result property="detail" column="detail"/>
+	    <result property="sender_name" column="sender_name"/>
+	    <result property="send_time" column="send_time"/>
+	    <result property="orderTypeShow" column="orderTypeShow"/>
+        <result property="statusShow" column="statusShow"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="UserOrderMap">
+		 SELECT a.* ,
+			b.NICK_NAME AS nick_name,
+			b.USER_CODE AS user_code,
+			b.WECHAT AS wechat,
+			c.merch_name AS merch_name,
+			d.detail AS detail,
+			e.NICK_NAME AS sender_name,
+			f.DICTNAME AS orderTypeShow,
+            g.DICTNAME AS statusShow
+			from t_user_order a
+			LEFT JOIN t_user b ON b.id = a.user_id
+			LEFT JOIN t_merch c on c.id = a.merch_id
+			LEFT JOIN t_user_address d on d.id = a.address_id
+			LEFT JOIN t_user e on e.id = a.send_user_id
+			LEFT JOIN t_dictbuss f ON a.order_type = f.DICTID AND f.DESCRIPT = '订单类型'
+            LEFT JOIN t_dictbuss g ON a.status = g.DICTID AND g.DESCRIPT = '订单状态'
+			    <where>
+			    	 b.USER_TYPE = 4
+			    	 <if test="user_id != null and user_id != ''" >
+                        AND a.user_id = #{user_id}
+                     </if>
+			    	<if test="user_code != null and user_code != ''" >
+				        AND b.user_code like '%${user_code}%'
+				     </if>
+				     <if test="nick_name != null and nick_name != ''" >
+				        AND b.nick_name  like '%${nick_name}%'
+				     </if>
+				       <if test="status != null and status != ''" >
+				        AND a.status = #{status}
+				     </if>
+				     <if test="beginTime != null and beginTime != ''" >
+                        AND a.create_time &gt; STR_TO_DATE(#{beginTime},'%Y-%m-%d %H:%i:%s') 
+                     </if>
+                     <if test="endTime != null and endTime != ''" >
+                        AND a.create_time &lt;  STR_TO_DATE(#{endTime},'%Y-%m-%d %H:%i:%s')
+                     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_user_order a 
+		 	LEFT JOIN t_user b ON b.id = a.user_id
+            LEFT JOIN t_merch c on c.id = a.merch_id
+            LEFT JOIN t_user_address d on d.id = a.address_id
+            LEFT JOIN t_user e on e.id = a.send_user_id
+            LEFT JOIN t_dictbuss f ON a.order_type = f.DICTID AND f.DESCRIPT = '订单类型'
+            LEFT JOIN t_dictbuss g ON a.status = g.DICTID AND g.DESCRIPT = '订单状态'
+		    <where>
+                     b.USER_TYPE = 4
+                     <if test="user_id != null and user_id != ''" >
+                        AND a.user_id = #{user_id}
+                     </if>
+                    <if test="user_code != null and user_code != ''" >
+                        AND b.user_code like '%${user_code}%'
+                     </if>
+                     <if test="nick_name != null and nick_name != ''" >
+                        AND b.nick_name  like '%${nick_name}%'
+                     </if>
+                       <if test="status != null and status != ''" >
+                        AND a.status = #{status}
+                     </if>
+                     <if test="beginTime != null and beginTime != ''" >
+                        AND a.create_time &gt; STR_TO_DATE(#{beginTime},'%Y-%m-%d %H:%i:%s') 
+                     </if>
+                     <if test="endTime != null and endTime != ''" >
+                        AND a.create_time &lt;  STR_TO_DATE(#{endTime},'%Y-%m-%d %H:%i:%s')
+                     </if>
+           </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_user_order WHERE id = #{id}
+    </delete>
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.UserOrder">
+        SELECT a.*
+            FROM t_user_order a 
+         WHERE a.id = #{id}
+    </select>
+    <update id="update" parameterType="com.irandoo.xhep.base.model.UserOrder">
+        UPDATE t_user_order
+        <set>
+          <if test="express_no != null and express_no != ''" >
+            express_no = #{express_no,jdbcType=VARCHAR},
+          </if>
+          <if test="express_company != null and express_company != ''" >
+            express_company = #{express_company,jdbcType=VARCHAR},
+          </if>
+          <if test="send_time != null and send_time != ''" >
+            send_time = #{send_time,jdbcType=TIMESTAMP},
+          </if>
+          <if test="send_user_id != null and send_user_id != ''" >
+            send_user_id = #{send_user_id,jdbcType=BIGINT},
+          </if>  
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.UserOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="user_id != null and user_id != ''" >
+            user_id,
+          </if>
+          <if test="order_type != null and order_type != ''" >
+            order_type,
+          </if>
+          <if test="order_code != null and order_code != ''" >
+            order_code,
+          </if>
+          <if test="merch_id != null and merch_id != ''" >
+            merch_id,
+          </if>
+          <if test="sale_code != null and sale_code != ''" >
+            sale_code,
+          </if>
+          <if test="address_id != null and address_id != ''" >
+            address_id,
+          </if>
+          <if test="status != null and status != ''" >
+            status,
+          </if>
+          <if test="express_no != null and express_no != ''" >
+            express_no,
+          </if>
+          <if test="express_company != null and express_company != ''" >
+            express_company,
+          </if>
+          <if test="send_user_id != null and send_user_id != ''" >
+            send_user_id,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="user_id != null and user_id != ''" >
+            #{user_id,jdbcType=BIGINT},
+          </if>
+          <if test="order_type != null and order_type != ''" >
+            #{order_type,jdbcType=VARCHAR},
+          </if>
+          <if test="order_code != null and order_code != ''" >
+            #{order_code,jdbcType=VARCHAR},
+          </if>
+           <if test="merch_id != null and merch_id != ''" >
+            #{merch_id,jdbcType=BIGINT},
+          </if>
+           <if test="sale_code != null and sale_code != ''" >
+            #{sale_code,jdbcType=VARCHAR},
+          </if>
+           <if test="address_id != null and address_id != ''" >
+            #{address_id,jdbcType=BIGINT},
+          </if>
+          <if test="status != null and status != ''" >
+            #{status,jdbcType=VARCHAR},
+          </if>
+           <if test="express_no != null and express_no != ''" >
+            #{express_no,jdbcType=VARCHAR},
+          </if>
+          <if test="express_company != null and express_company != ''" >
+            #{express_company,jdbcType=VARCHAR},
+          </if>
+           <if test="send_user_id != null and send_user_id != ''" >
+            #{send_user_id,jdbcType=BIGINT},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=BIGINT},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+</mapper>

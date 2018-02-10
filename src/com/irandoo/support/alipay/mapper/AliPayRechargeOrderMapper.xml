@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.support.alipay.mapper.AliPayRechargeOrderMapper">
+     <insert id="insert" parameterType="com.irandoo.support.alipay.model.AliPayRechargeOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_recharge_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="order_id != null and order_id != ''" >
+            order_id,
+          </if>
+          <if test="room_id != null and room_id != ''" >
+            room_id,
+          </if>
+          <if test="private_room_id != null and private_room_id != ''" >
+            private_room_id,
+          </if>
+          <if test="buy_user_id != null and buy_user_id != ''" >
+            buy_user_id,
+          </if>
+          <if test="receive_user_id != null and receive_user_id != ''" >
+            receive_user_id,
+          </if>
+          <if test="meal_id != null and meal_id != ''" >
+            meal_id,
+          </if>
+          <if test="pay_money != null and pay_money != ''" >
+            pay_money,
+          </if>
+           <if test="pay_type != null and pay_type != ''" >
+            pay_type,
+          </if>
+           <if test="state != null and state != ''" >
+            state,
+          </if>
+            create_time,update_timestamp,is_deleted
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="order_id != null and order_id != ''" >
+            #{order_id,jdbcType=VARCHAR},
+          </if>
+          <if test="room_id != null and room_id != ''" >
+            #{room_id,jdbcType=BIGINT},
+          </if>
+          <if test="private_room_id != null and private_room_id != ''" >
+            #{private_room_id,jdbcType=BIGINT},
+          </if>
+           <if test="buy_user_id != null and buy_user_id != ''" >
+            #{buy_user_id,jdbcType=BIGINT},
+          </if>
+          <if test="receive_user_id != null and receive_user_id != ''" >
+            #{receive_user_id,jdbcType=BIGINT},
+          </if>
+           <if test="meal_id != null and meal_id != ''" >
+            #{meal_id,jdbcType=BIGINT},
+          </if>
+          <if test="pay_money != null and pay_money != ''" >
+            #{pay_money,jdbcType=BIGINT},
+          </if>
+            <if test="pay_type != null and pay_type != ''" >
+            #{pay_type,jdbcType=VARCHAR},
+          </if>
+            <if test="state != null and state != ''" >
+            #{state,jdbcType=INTEGER},
+          </if>
+            now(),now(),'N'
+        </trim>
+    </insert>
+     <update id="update" parameterType="com.irandoo.support.alipay.model.AliPayRechargeOrder">
+        UPDATE t_recharge_order
+           <set>
+             <if test="state != null" >
+              state = #{state,jdbcType=INTEGER},
+             </if>
+             update_timestamp = now()
+        </set>
+        WHERE order_id = #{order_id}
+    </update>
+   <select id="getAliPayRechargeOrderById"  parameterType="String" resultType="com.irandoo.support.alipay.model.AliPayRechargeOrder"> 
+       SELECT a.*
+        FROM t_recharge_order a
+        WHERE  a.order_id = #{order_id}
+   </select>
+   
+   <select id="getRechargeOrderCount" parameterType="map" resultType="Integer">
+   SELECT a.state AS state
+        FROM t_recharge_order a
+        WHERE  a.order_id = #{order_id}
+   </select>
+   
+</mapper>
+

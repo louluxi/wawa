@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.FeedbackJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.FeedbackJson">
+		 SELECT  
+				a.q_code AS qCode,
+				a.q_name AS qName,
+				a.title AS title,
+				a.q_content AS qContent,
+				a.q_date AS qDate,
+				a.r_code AS rCode,
+				a.r_name AS rName,
+				a.r_content AS rContent,
+				a.remark AS remark,
+				a.r_staus AS rStatus,
+				a.r_date AS rDate
+			FROM t_feedback a
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<insert id="insert" parameterType="com.irandoo.app.interf.json.FeedbackJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_feedback
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="qCode != null and qCode != ''" >
+	        Q_CODE,
+	      </if>
+	      <if test="qName != null and qName != ''" >
+	        Q_NAME,
+	      </if>
+	      <if test="title != null and title != ''" >
+	        TITLE,
+	      </if>
+	      <if test="qContent != null and qContent != ''" >
+	        Q_CONTENT,
+	      </if>
+	        Q_DATE
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="qCode != null and qCode != ''" >
+	        #{qCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="qName != null and qName != ''" >
+	        #{qName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="title != null and title != ''" >
+	        #{title,jdbcType=VARCHAR},
+	      </if>
+	      <if test="qContent != null and qContent != ''" >
+	        #{qContent,jdbcType=VARCHAR},
+	      </if>
+	        now()
+	    </trim>
+	</insert>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.RoomClassMapper">
+	<resultMap type="com.irandoo.xhep.base.model.RoomClass" id="RoomClassMap">
+		<id property="id" column="id"/>
+		<result property="class_name" column="class_name"/>
+		<result property="class_icon" column="class_icon"/>
+		<result property="class_sort" column="class_sort"/>
+		<result property="createtime" column="createtime"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="RoomClassMap">
+		 SELECT a.*
+		 	FROM t_room_class a 
+			    <where>
+			    	1=1
+				     <if test="class_name != null and class_name != ''" >
+				        and a.class_name  like "%"#{class_name}"%" 
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_room_class a 
+		     <where>
+                    1=1
+                     <if test="class_name != null and class_name != ''" >
+                        and a.class_name  like "%"#{class_name}"%" 
+                     </if>
+             </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_room_class WHERE id = #{id}
+    </delete>
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.RoomClass">
+        SELECT a.*
+            FROM t_room_class a 
+         WHERE a.id = #{id}
+    </select>
+    
+     <update id="update" parameterType="com.irandoo.xhep.base.model.RoomClass">
+        UPDATE t_room_class
+        <set>
+          <if test="class_name != null and class_name != ''" >
+            class_name = #{class_name,jdbcType=VARCHAR},
+          </if>
+          <if test="class_icon != null and class_icon != ''" >
+            class_icon = #{class_icon,jdbcType=VARCHAR},
+          </if>
+          <if test="class_sort != null and class_sort != ''" >
+            class_sort = #{class_sort,jdbcType=INTEGER},
+          </if>
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.RoomClass" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_room_class
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="class_name != null and class_name != ''" >
+            class_name,
+          </if>
+          <if test="class_icon != null and class_icon != ''" >
+            class_icon,
+          </if>
+          <if test="class_sort != null and class_sort != ''" >
+            class_sort,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            createtime,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="class_name != null and class_name != ''" >
+            #{class_name,jdbcType=VARCHAR},
+          </if>
+          <if test="class_icon != null and class_icon != ''" >
+            #{class_icon,jdbcType=VARCHAR},
+          </if>
+          <if test="class_sort != null and class_sort != ''" >
+            #{class_sort,jdbcType=INTEGER},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.PrivateRoomMapper">
+	<resultMap type="com.irandoo.xhep.base.model.PrivateRoom" id="PrivateRoomMap">
+		<id property="id" column="id"/>
+		<result property="room_id" column="room_id"/>
+		<result property="creator" column="creator"/>
+		<result property="room_name" column="room_name"/>
+		<result property="room_type" column="room_type"/>
+		<result property="status" column="status"/>
+		<result property="duration" column="duration"/>
+		<result property="money_minute" column="money_minute"/>
+		<result property="coin_once" column="coin_once"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+		<result property="roomtype" column="roomtype"/>
+		<result property="roomName" column="roomName"/>
+        <result property="userName" column="userName"/>
+		<result property="privateStatus" column="privateStatus"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="PrivateRoomMap">	 
+			SELECT
+			    b.room_name AS roomName,
+                c.USER_NAME As userName,
+				e.DICTNAME AS roomtype,
+				f.DICTNAME AS privateStatus,
+				a.* 
+				from t_private_room a
+				LEFT JOIN t_room b on a.room_id = b.id
+				LEFT JOIN t_user c on a.creator = c.id
+				LEFT JOIN t_dictbuss e ON a.room_type = e.DICTID AND e.DESCRIPT = '包房类型'
+				LEFT JOIN t_dictbuss f ON a.status = f.DICTID AND f.DESCRIPT = '包房状态'
+			    <where>
+			    	1=1
+			    	<if test="room_id != null and room_id != ''" >
+				        AND a.room_id like '%${room_id}%'
+				     </if>
+				     <if test="room_name != null and room_name != ''" >
+                        AND a.room_name  like '%${room_name}%'
+                     </if>
+				     <if test="userName != null and userName != ''" >
+				        AND c.USER_NAME  like '%${userName}%'
+				     </if>
+				     <if test="room_type != null and room_type != ''" >
+				        AND a.room_type = #{room_type}
+				     </if>
+				      <if test="status != null and status != ''" >
+				        AND a.STATUS = #{status}
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+                from t_private_room a
+                LEFT JOIN t_room b on a.room_id = b.id
+                LEFT JOIN t_user c on a.creator = c.id
+                LEFT JOIN t_dictbuss e ON a.room_type = e.DICTID AND e.DESCRIPT = '包房类型'
+                LEFT JOIN t_dictbuss f ON a.status = f.DICTID AND f.DESCRIPT = '包房状态' 
+		    <where>
+                    1=1
+                    <if test="room_id != null and room_id != ''" >
+                        AND a.room_id like '%${room_id}%'
+                     </if>
+                     <if test="room_name != null and room_name != ''" >
+                        AND a.room_name  like '%${room_name}%'
+                     </if>
+                     <if test="userName != null and userName != ''" >
+                        AND c.USER_NAME  like '%${userName}%'
+                     </if>
+                     <if test="room_type != null and room_type != ''" >
+                        AND a.room_type = #{room_type}
+                     </if>
+                      <if test="status != null and status != ''" >
+                        AND a.STATUS = #{status}
+                     </if>
+                </where>
+	</select>
+	
+</mapper>

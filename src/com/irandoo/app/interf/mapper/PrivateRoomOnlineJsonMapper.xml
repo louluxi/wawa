@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.PrivateRoomOnlineJsonMapper">
+ <!-- 包房人员查询 -->
+<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.PrivateRoomOnlineJson">
+  SELECT 
+    a.user_id as userId,
+	a.user_name as userName,
+	a.user_icon as userIcon,
+	a.`status` as status,
+	a.time_in as applyTime 
+ from t_online_user a
+   where a.room_id=(select p.room_id from t_private_room p where id=#{id})
+</select>
+ <!-- 包房人员审批 -->
+ 	<update id="update" parameterType="com.irandoo.app.interf.json.PrivateRoomOnlineJson">
+		UPDATE t_online_user a
+		<set>
+		  <if test="status != null and status != ''" >
+	       a.status = #{status,jdbcType=VARCHAR},
+	      </if>
+		</set>
+		WHERE a.user_id=#{userId} and a.room_id=(select p.room_id from t_private_room p where id=#{id})
+	</update>
+  <!-- 包房人员踢出 -->
+  <delete id="deletePerson" parameterType="com.irandoo.app.interf.json.PrivateRoomOnlineJson">
+  DELETE from  t_online_user  
+    WHERE  
+  user_id=#{userId} and room_id=(select p.room_id from t_private_room p where id=#{id} )
+  </delete>
+  <!-- 申请加入包房 --> 
+	<insert id="insert" parameterType="com.irandoo.app.interf.json.PrivateRoomOnlineJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_online_user
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="roomId != null and roomId != ''" >
+	        room_id,
+	      </if>
+	      <if test="userId != null and userId != ''" >
+	        user_id,
+	      </if>
+	      <if test="userName != null and userName != ''" >
+	        user_name,
+	      </if>
+	      <if test="userIcon != null and userIcon != ''" >
+	        user_icon,
+	      </if>
+	      <if test="status != null and status != ''" >
+	        status,
+	      </if> 
+	        Time_IN
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="roomId != null and roomId != ''" >
+	        #{roomId,jdbcType=VARCHAR},
+	      </if>
+	       <if test="userId != null and userId != ''" >
+	        #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="userName != null and userName != ''" >
+	        #{userName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="userIcon != null and userIcon != ''" >
+	        #{userIcon,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	        #{status,jdbcType=VARCHAR},
+	      </if>  
+	        now()
+	    </trim>
+	</insert>
+	
+	<!-- 根据房间id清除房间在线人员表 -->
+	<delete id="deleteALLByRoomId" parameterType="String">
+	  Delete from t_online_user where room_id=#{roomId} 
+	</delete>
+</mapper>

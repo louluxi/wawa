@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.FeedBackMapper">
+	<resultMap type="com.irandoo.xhep.base.model.FeedBack" id="FeedBackMap">
+		<id property="id" column="id"/>
+		<result property="q_code" column="q_code"/>
+		<result property="q_name" column="q_name"/>
+		<result property="title" column="title"/>
+		<result property="q_content" column="q_content"/>
+		<result property="q_date" column="q_date"/>
+		<result property="r_code" column="r_code"/>
+		<result property="r_name" column="r_name"/>
+		<result property="r_content" column="r_content"/>
+		<result property="remark" column="remark"/>
+	    <result property="r_date" column="r_date"/>
+	    <result property="corp_code" column="corp_code"/>
+	    <result property="stausShow" column="stausShow"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="FeedBackMap">
+		  SELECT a.*,
+			 b.DICTNAME AS stausShow
+			 from t_feedback a
+			 LEFT JOIN t_dictbuss b ON a.r_staus = b.DICTID AND b.DESCRIPT = '反馈意见处理状态'
+			     <where>
+                    1=1
+                    <if test="q_code != null and q_code != ''" >
+                        and a.q_code  like "%"#{q_code}"%" 
+                     </if>
+                     <if test="q_name != null and q_name != ''" >
+                        and a.q_name  like "%"#{q_name}"%" 
+                     </if>
+                     <if test="r_code != null and r_code != ''" >
+                        and a.r_code  like "%"#{r_code}"%" 
+                     </if>
+                     <if test="r_name != null and r_name != ''" >
+                        and a.r_name  like "%"#{r_name}"%" 
+                     </if>
+                     <if test="title != null and title != ''" >
+                        and a.title  like "%"#{title}"%" 
+                     </if>
+                    <if test="r_staus != null and r_staus != '' " >
+                        and a.r_staus = #{r_staus}  
+                     </if>
+                </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+<select id="getTotalCount" parameterType="map" resultType="int">
+        SELECT count(1)
+             from t_feedback a
+             LEFT JOIN t_dictbuss b ON a.r_staus = b.DICTID AND b.DESCRIPT = '反馈意见处理状态'
+                <where>
+                    1=1
+                    <if test="q_code != null and q_code != ''" >
+                        and a.q_code  like "%"#{q_code}"%" 
+                     </if>
+                     <if test="q_name != null and q_name != ''" >
+                        and a.q_name  like "%"#{q_name}"%" 
+                     </if>
+                     <if test="r_code != null and r_code != ''" >
+                        and a.r_code  like "%"#{r_code}"%" 
+                     </if>
+                     <if test="r_name != null and r_name != ''" >
+                        and a.r_name  like "%"#{r_name}"%" 
+                     </if>
+                     <if test="title != null and title != ''" >
+                        and a.title  like "%"#{title}"%" 
+                     </if>
+                    <if test="r_staus != null and r_staus != '' " >
+                        and a.r_staus = #{r_staus}  
+                     </if>
+                </where>
+    </select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_feedback WHERE id = #{id}
+    </delete>
+	
+</mapper>

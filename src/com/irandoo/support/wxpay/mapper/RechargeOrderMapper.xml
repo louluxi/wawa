@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.support.wxpay.mapper.RechargeOrderMapper">
+  
+    <insert id="insert" parameterType="com.irandoo.support.wxpay.model.RechargeOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_recharge_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="orderId != null and orderId != ''" >
+            order_Id,
+          </if>
+          <if test="roomId != null and roomId != ''" >
+            room_Id,
+          </if>
+          <if test="privateRoomId != null and privateRoomId != ''" >
+            private_Room_Id,
+          </if>
+          <if test="buyUserId != null and buyUserId != ''" >
+            buy_user_Id,
+          </if>
+          <if test="receiveUserId != null and receiveUserId != ''" >
+            receive_user_Id,
+          </if>
+          <if test="mealId != null and mealId != ''" >
+            meal_Id,
+          </if>
+          <if test="payMoney != null and payMoney != ''" >
+            pay_Money,
+          </if>
+          <if test="payType != null and payType != ''" >
+            pay_Type,
+          </if>
+          <if test="state != null and state != ''" >
+            state,
+          </if>
+          <if test="isDeleted != null and isDeleted != ''" >
+            is_Deleted,
+          </if>
+          <if test="corpCode != null and corpCode != ''" >
+            corp_code,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="orderId != null and orderId != ''" >
+            #{orderId,jdbcType=BIGINT},
+          </if>
+          <if test="roomId != null and roomId != ''" >
+            #{roomId,jdbcType=BIGINT},
+          </if>
+          <if test="privateRoomId != null and privateRoomId != ''" >
+            #{privateRoomId,jdbcType=BIGINT},
+          </if>
+           <if test="buyUserId != null and buyUserId != ''" >
+            #{buyUserId,jdbcType=BIGINT},
+          </if>
+          <if test="receiveUserId != null and receiveUserId != ''" >
+            #{receiveUserId,jdbcType=BIGINT},
+          </if>
+           <if test="mealId != null and mealId != ''" >
+            #{mealId,jdbcType=BIGINT},
+          </if>
+          <if test="payMoney != null and payMoney != ''" >
+            #{payMoney,jdbcType=DOUBLE},
+          </if>
+          <if test="payType != null and payType != ''" >
+            #{payType,jdbcType=VARCHAR},
+          </if>
+          <if test="state != null and state != ''" >
+            #{state,jdbcType=BIGINT},
+          </if>
+          <if test="isDeleted != null and isDeleted != ''" >
+            #{isDeleted,jdbcType=VARCHAR},
+          </if>
+          <if test="corpCode != null and corpCode != ''" >
+            #{corpCode,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+    
+    <select id="getInfoByOrderId" parameterType="String" resultType="com.irandoo.support.wxpay.model.RechargeOrder">
+      SELECT
+         a.id as id, 
+         a.room_id as roomId,
+         a.private_room_id as privateRoomId,
+ 		 a.buy_user_id as buyUserId,
+		 a.receive_user_id as receiveUserId,
+		 a.meal_id as mealId,
+		 a.pay_money as payMoney,
+		 a.pay_type as payType,
+		 a.state as state,
+		 a.is_deleted as isDeleted         
+	  FROM   t_recharge_order a where a.order_id=#{orderId}
+    </select>
+    
+   <update id="updateState" parameterType="com.irandoo.support.wxpay.model.RechargeOrder">
+        UPDATE t_recharge_order
+        <set>
+          <if test="state != null and state != ''" >
+            state = #{state,jdbcType=VARCHAR},
+          </if>      
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error.jsp</location>
+  </error-page>
+   <error-page>
+    <error-code>500</error-code>
+    <location>/error.jsp</location>
+  </error-page>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>StartOnLoadServlet</servlet-name>
+    <servlet-class>com.irandoo.xhep.base.util.StartOnLoadServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>StartOnLoadServlet</servlet-name>
+    <url-pattern>/servlet/StartOnLoadServlet</url-pattern>
+  </servlet-mapping>
+ <!-- 全局过滤 -->
+ <filter>
+    <filter-name>securityFilter</filter-name>
+    <filter-class>com.irandoo.xhep.base.util.SecurityFilter</filter-class>
+    <init-param>
+      <param-name>excludeActions</param-name>
+      <param-value>
+				/sysadmin/toLogin.action
+			</param-value>
+    </init-param>
+    <init-param>
+      <param-name>excludePath</param-name>
+      <param-value>
+			    /auth/,
+			    /api/
+			</param-value>
+    </init-param>
+    <init-param>
+      <param-name>filterType</param-name>
+      <param-value>
+				.action,
+				.jsp	
+			</param-value>
+    </init-param>
+  </filter>
+  
+  <filter-mapping>
+    <filter-name>securityFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>  
+    <filter-name>struts2</filter-name>  
+    <url-pattern>*.jsp</url-pattern>  
+</filter-mapping> 
+  <!-- 移动端过滤 -->
+ <filter>
+    <filter-name>jwtAuthenticationTokenFilter</filter-name>
+    <filter-class>com.irandoo.xhep.anth.filter.JwtTokenFilter</filter-class>
+    <init-param>
+      <param-name>middleResList</param-name>
+      <param-value>
+				/login.action
+			</param-value>
+    </init-param>
+
+  </filter>
+  
+  <filter-mapping>
+    <filter-name>jwtAuthenticationTokenFilter</filter-name>
+    <url-pattern>/api/* </url-pattern>
+  </filter-mapping>
+
+  
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
+  </context-param>
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+    <init-param>
+      <param-name>confPath</param-name>
+      <param-value>/WEB-INF/urlrewrite.xml</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+  <filter>
+    <filter-name>struts2</filter-name>
+    <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>struts2</filter-name>
+    <url-pattern>*.action</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+  </filter-mapping>
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+</web-app>

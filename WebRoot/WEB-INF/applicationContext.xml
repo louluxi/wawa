@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+           http://cxf.apache.org/jaxws 
+		   http://cxf.apache.org/schemas/jaxws.xsd">
+	<context:annotation-config />
+	<context:component-scan base-package="com.irandoo.xhep.base" />
+	<context:component-scan base-package="com.irandoo.xhep.anth" />
+	<context:component-scan base-package="com.irandoo.xhep.sys" />
+	<context:component-scan base-package="com.irandoo.app.interf" />
+	<context:component-scan base-package="com.irandoo.support.wxpay" />
+	<context:component-scan base-package="com.irandoo.support.alipay" />
+    <aop:aspectj-autoproxy/>		
+	<bean class="com.irandoo.xhep.base.util.PropertyPlaceholderConfigurerEx">
+		
+		<property name="locations" value="/WEB-INF/classes/db.properties"/>
+		
+		 <!--security为false，则对属性文件的属性值不进行解密处理，为true，则进行解密 -->
+		<property name="secutiry" value="false"/>
+
+	</bean>
+	<bean id="dataSource" destroy-method="close"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="${dbdriver}" />
+		<property name="url" value="${dburl}" />
+		<property name="username" value="${dbuser}" />
+		<property name="password" value="${dbpass}" />
+        <property name="maxActive" value="${jdbc.maxActive}" />  
+        <property name="maxIdle" value="${jdbc.maxIdle}" />
+        <property name="maxWait" value="${jdbc.maxWait}" />  
+	</bean>
+
+	<!-- define the SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.irandoo.app.interf.json,com.irandoo.xhep.base.model,com.irandoo.xhep.auth.model,com.irandoo.support.wxpay.model,com.irandoo.support.alipay.model" />
+		<property name="configLocation" value="/WEB-INF/mybatis-config.xml" />
+	</bean>
+
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- scan for mappers and let them be autowired -->
+	<!-- 分号或逗号作为分隔符设置多于一个的包路径 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.irandoo.app.interf.mapper,com.irandoo.xhep.base.mapper,com.irandoo.xhep.sys.mapper,com.irandoo.support.wxpay.mapper,com.irandoo.support.alipay.mapper" />
+	</bean>
+	                                                                                                                                                                
+
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:annotation-driven transaction-manager="txManager" />
+	
+	 <bean id="quartzFactory" class="com.irandoo.app.interf.util.BsQuartzJobFactory"></bean>
+	
+	<bean name="doTimeTasks" class="org.springframework.scheduling.quartz.JobDetailBean"> 
+		<property name="jobClass" value="com.irandoo.app.interf.util.DoTimeTasks" /> 
+		<property name="durability" value="true"></property>
+    </bean> 
+    <bean name="practiceTimeTasks" class="org.springframework.scheduling.quartz.JobDetailBean"> 
+		 <property name="jobClass" value="com.irandoo.app.interf.util.PracticeTimeTasks" /> 
+		<property name="durability" value="true"></property>
+    </bean>
+    <!-- 时间比对,关闭时间已经到了的包房(每分钟执行一次) -->
+    <bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> 
+		<property name="jobDetail" ref="doTimeTasks" /> 
+		<property name="startDelay" value="0" />
+		<property name="repeatInterval" value="60000" />
+   </bean> 
+   
+   <!-- 时间比对,进行练习币的赠送(每隔两小时执行一次) -->
+    <bean id="practiceTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> 
+		<property name="jobDetail" ref="practiceTimeTasks" /> 
+		<property name="startDelay" value="0" />
+		<property name="repeatInterval" value="7200000" />
+		<!-- 7200000 -->
+   </bean> 
+	
+	<bean id="startQuertz" lazy-init="false" autowire="no"  class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> 
+		 <property name="jobFactory" ref="quartzFactory"></property>
+		<property name="triggers"> 
+		<list> 
+		<ref bean="simpleTrigger" /> 
+		<ref bean="practiceTrigger"></ref>
+		</list> 
+	   </property> 
+	</bean> 
+</beans>

@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.RoomMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Room" id="RoomMap">
+		<id property="id" column="id"/>
+		<result property="device_id" column="device_id"/>
+		<result property="front_camera_id" column="front_camera_id"/>
+		<result property="side_camera_id" column="side_camera_id"/>
+		<result property="room_code" column="room_code"/>
+		<result property="room_name" column="room_name"/>
+		<result property="room_desc" column="room_desc"/>
+		<result property="max_user_num" column="max_user_num"/>
+		<result property="coin_once" column="coin_once"/>
+		<result property="is_private" column="is_private"/>
+		<result property="is_putaway" column="is_putaway"/>
+		<result property="status" column="status"/>
+		<result property="hot" column="hot"/>
+		<result property="istop" column="istop"/>
+		<result property="sort" column="sort"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp" />
+		<result property="corp_code" column="corp_code" />
+		<result property="className" column="className"/>
+		<result property="deviceCode" column="deviceCode"/>
+		<result property="frontCode" column="frontCode"/>
+        <result property="sideCode" column="sideCode"/>
+	    <result property="merchName" column="merchName"/>
+        <result property="merchNum" column="merchNum"/>
+        <result property="userNum" column="userNum"/>
+        <result property="frontCamera" column="frontCamera"/>
+        <result property="sideCamera" column="sideCamera"/>
+        <result property="deviceIp" column="deviceIp"/>
+        <result property="devicePort" column="devicePort" />
+        <result property="room_icon" column="room_icon"/>
+        <result property="background_music" column="background_music"/>
+        <result property="background_img" column="background_img" />
+	    <result property="privateShow" column="privateShow" />
+	    <result property="putawayShow" column="putawayShow" />
+	    <result property="strtusShow" column="strtusShow" />
+	    <result property="istopShow" column="istopShow" />
+	    <result property="checkMerchNum" column="checkMerchNum" />
+	    <result property="merchNumShow" column="merchNumShow" />
+	    <result property="classIds" column="classIds" />
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="RoomMap">
+		
+  select  (select Group_concat(y.class_name SEPARATOR ',') aa
+            from t_room_class_rel  x
+            LEFT JOIN t_room_class y on y.id = x.class_id where x.room_id =a.id) AS className,
+          (select Group_concat(p.id SEPARATOR ',') bb
+            from t_room_class_rel  o
+            LEFT JOIN t_room_class p on p.id = o.class_id where o.room_id =a.id) AS classIds,
+            f.device_code As deviceCode,
+            g.device_code As frontCode,
+            h.device_code As sideCode,
+            j.merch_name AS merchName,
+            CASE
+            WHEN b.merch_num >0  then b.merch_num  
+            ELSE '0' END AS merchNumShow,
+            ifnull((SELECT COUNT(1) from t_online_user where room_id=a.id),0) AS userNum,
+            a.*,
+            CONCAT( CONCAT('rtmp://17937.liveplay.myqcloud.com/live/17937_',CAST(a.front_camera_id AS CHAR)),'_oo') AS frontCamera,
+            CONCAT( CONCAT('rtmp://17937.liveplay.myqcloud.com/live/17937_',CAST(a.side_camera_id AS CHAR)),'_o1') AS sideCamera,
+            f.ip AS deviceIp,
+            f.port AS devicePort,
+            k.DICTNAME AS privateShow,
+            l.DICTNAME AS putawayShow,
+            m.DICTNAME AS strtusShow,
+            n.DICTNAME AS istopShow,
+            ifnull((SELECT COUNT(1) from t_user_merch where room_id=a.id and status = 1),0) AS checkMerchNum 
+            from t_room a 
+            LEFT JOIN t_room_merch b on a.id = b.room_id 
+            LEFT JOIN t_device f on a.device_id = f.id
+            LEFT JOIN t_device g on a.front_camera_id = g.id
+            LEFT JOIN t_device h on a.side_camera_id = h.id
+            LEFT JOIN t_merch j on b.merch_id  = j.id
+            LEFT JOIN t_dictbuss k ON a.is_private = k.DICTID AND k.DESCRIPT = '包房状态'
+            LEFT JOIN t_dictbuss l ON a.is_putaway = l.DICTID AND l.DESCRIPT = '房间上架状态'
+            LEFT JOIN t_dictbuss m ON a.status = m.DICTID AND m.DESCRIPT = '房间状态' 
+            LEFT JOIN t_dictbuss n ON a.istop = n.DICTID AND n.DESCRIPT = '是否'    
+			    <where>
+			    	1=1
+			    	<if test="room_code != null and room_code != ''" >
+				        AND a.room_code like '%${room_code}%'
+				     </if>
+				     <if test="room_name != null and room_name != ''" >
+				        AND a.room_name like '%${room_name}%'
+				     </if>
+				     <if test="is_private != null and is_private != ''" >
+				        AND a.is_private = #{is_private}
+				     </if>
+				     <if test="is_putaway != null and is_putaway != ''" >
+				        AND a.is_putaway = #{is_putaway}
+				     </if>
+				     <if test="status != null and status != ''" >
+				        AND a.status = #{status}
+				     </if>
+				     <if test="istop != null and istop != ''" >
+                        AND a.istop = #{istop}
+                     </if>
+			    </where>
+			 ORDER BY a.id  desc
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+            FROM t_room a 
+		   <where>
+                 1=1
+                <if test="room_code != null and room_code != ''" >
+                    AND a.room_code like '%${room_code}%'
+                </if>
+                <if test="room_name != null and room_name != ''" >
+                    AND a.room_name like '%${room_name}%'
+                </if>
+                <if test="is_private != null and is_private != ''" >
+                    AND a.is_private = #{is_private}
+                </if>
+                <if test="is_putaway != null and is_putaway != ''" >
+                     AND a.is_putaway = #{is_putaway}
+                </if>
+                <if test="status != null and status != ''" >
+                     AND a.status = #{status}
+                </if>
+                <if test="istop != null and istop != ''" >
+                     AND a.istop = #{istop}
+                </if>     
+             </where>
+	</select>
+	<!-- 删除房间 -->
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_room WHERE id = #{id}
+    </delete>
+    <!-- 删除房间商品关联表  -->
+    <delete id="deleteRoomMerch" parameterType="long">
+        DELETE FROM t_room_merch WHERE room_id = #{room_id}
+    </delete>
+    <!-- 删除房间类别关联表 -->
+    <delete id="deleteRoomClass" parameterType="long">
+        DELETE FROM t_room_class_rel WHERE room_id = #{room_id}
+    </delete>
+    <update id="updatePutaway" parameterType="map">
+        UPDATE t_room set is_putaway= #{is_putaway} 
+        WHERE id = #{id}   
+    </update>
+    
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Room">
+    select (select Group_concat(y.class_name SEPARATOR ',') aa
+            from t_room_class_rel  x
+            LEFT JOIN t_room_class y on y.id = x.class_id where x.room_id =a.id) AS className,
+           (select Group_concat(p.id SEPARATOR ',') bb
+            from t_room_class_rel  o
+            LEFT JOIN t_room_class p on p.id = o.class_id where o.room_id =a.id) AS classIds,
+            f.device_code As deviceCode,
+            g.device_code As frontCode,
+            h.device_code As sideCode,
+            j.merch_name AS merchName,
+            k.type_code As merchTypeCode,
+            j.merch_num AS merchNum,
+            b.merch_id As merchId,
+            a.*,
+            f.ip AS deviceIp,
+            f.port AS devicePort
+            from t_room a 
+            LEFT JOIN t_room_merch b on b.room_id = a.id
+            
+            LEFT JOIN t_device f on a.device_id = f.id
+            LEFT JOIN t_device g on a.front_camera_id = g.id
+            LEFT JOIN t_device h on a.side_camera_id = h.id
+            LEFT JOIN t_merch j on a.merch_id  = j.id 
+            LEFT JOIN t_merch_type  k on j.merch_type_id  = k.id 
+            WHERE a.id =  #{id}  
+           ORDER BY a.id  desc
+    </select>
+    
+    <select id="getRoomClassName" resultType="com.irandoo.xhep.base.model.RoomClass">
+	    SELECT id,class_name 
+	      from t_room_class 
+    </select>
+    
+     <update id="update" parameterType="com.irandoo.xhep.base.model.Room">
+        UPDATE t_room
+        <set>
+          <if test="room_name != null and room_name != ''" >
+            room_name = #{room_name,jdbcType=VARCHAR},
+          </if>
+          <if test="room_code != null and room_code != ''" >
+            room_code = #{room_code,jdbcType=VARCHAR},
+          </if>
+          <if test="merch_id != null and merch_id != ''" >
+            merch_id = #{merch_id,jdbcType=BIGINT},
+          </if>
+          <if test="max_user_num != null and max_user_num != ''" >
+            max_user_num = #{max_user_num,jdbcType=BIGINT},
+          </if>
+          <if test="coin_once != null and coin_once != ''" >
+            coin_once = #{coin_once,jdbcType=INTEGER},
+          </if>
+          <if test="is_private != null and is_private != ''" >
+            is_private = #{is_private,jdbcType=CHAR},
+          </if>
+          <if test="istop != null and istop != ''" >
+            istop = #{istop,jdbcType=INTEGER},
+          </if>
+          <if test="sort != null and sort != ''" >
+            sort = #{sort,jdbcType=INTEGER},
+          </if>
+          <if test="room_desc != null and room_desc != ''" >
+            room_desc = #{room_desc,jdbcType=VARCHAR},
+          </if>
+          <if test="room_icon != null and room_icon != ''" >
+            room_icon = #{room_icon,jdbcType=VARCHAR},
+          </if>
+          <if test="background_music != null and background_music != ''" >
+            background_music = #{background_music,jdbcType=VARCHAR},
+          </if>
+          <if test="background_img != null and background_img != ''" >
+            background_img = #{background_img,jdbcType=VARCHAR},
+          </if>
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="updateRoomClassRefById" parameterType="map">
+        UPDATE t_room_class_rel
+        <set>
+        <if test="class_id != null and class_id != ''" >
+            class_id = #{class_id,jdbcType=VARCHAR},
+        </if>
+        update_timestamp = now()
+        </set>
+        WHERE room_id = #{roomId}
+    </update>
+    
+    <select id="getDeviceIdByRoomId" parameterType="Long" resultType="Long">
+        select a.device_id from t_room a where a.id = #{id}
+    </select>
+    
+    <select id="getFrontCameraIdByRoomId" parameterType="Long" resultType="Long">
+        select a.front_camera_id from t_room a where a.id = #{id}
+    </select>
+    
+    <select id="getSideCameraIdByRoomId" parameterType="Long" resultType="Long">
+        select a.side_camera_id from t_room a where a.id = #{id}
+    </select>
+    
+    <update id="updateDevicecode" parameterType="map">
+        UPDATE  t_device
+         set device_code = #{device_code},
+         update_timestamp = now()
+         WHERE id = #{id}
+    </update>
+    
+    <select id="getMerchTypeIdByRoomId" parameterType="Long" resultType="Long">
+        select c.id from t_room_merch a
+			LEFT JOIN t_merch b on a.merch_id = b.id
+			LEFT JOIN t_merch_type c on b.merch_type_id = c.id
+			WHERE a.room_id = #{id}
+    </select>
+    
+    <update id="updateMerchTypeCode" parameterType="map">
+        UPDATE t_merch_type
+        <set>
+        <if test="type_code != null and type_code != ''" >
+            type_code = #{type_code,jdbcType=VARCHAR},
+        </if>
+        update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="updateMerchNum" parameterType="map">
+        UPDATE  t_room_merch
+        <set>
+        <if test="merch_num != null and merch_num != ''" >
+            merch_num = #{merch_num,jdbcType=VARCHAR},
+        </if>
+        <if test="merch_id != null and merch_id != ''" >
+            merch_id = #{merch_id,jdbcType=BIGINT},
+        </if>
+        </set>
+         WHERE room_id = #{room_id}
+    </update>
+    
+    <select id="getDeviceIdByDeviceCode" parameterType="String" resultType="Long">
+      select a.id 
+         FROM t_device a
+         WHERE  a.device_code = #{device_code}
+    </select>
+    
+    <select id="getMerchIdByMerchTypeCode" parameterType="String" resultType="Long">
+      SELECT b.id from t_merch_type a
+		LEFT JOIN t_merch b  on b.merch_type_id = a.id
+		where a.type_code = #{type_code}
+    </select>
+    
+    <!-- 添加房间 -->
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.Room" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_room
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="device_id != null and device_id != ''" >
+            device_id,
+          </if>
+          <if test="merch_id != null and merch_id != ''" >
+            merch_id,
+          </if>
+          <if test="room_code != null and room_code != ''" >
+            room_code,
+          </if>
+          <if test="front_camera_id != null and front_camera_id != ''" >
+            front_camera_id,
+          </if>
+          <if test="side_camera_id != null and side_camera_id != ''" >
+            side_camera_id,
+          </if>
+          <if test="room_name != null and room_name != ''" >
+            room_name,
+          </if>
+          <if test="room_desc != null and room_desc != ''" >
+            room_desc,
+          </if>
+          <if test="max_user_num != null and max_user_num != ''" >
+            max_user_num,
+          </if>
+          <if test="coin_once != null and coin_once != ''" >
+            coin_once,
+          </if>
+          <if test="is_private != null and is_private != ''" >
+            is_private,
+          </if>
+          <if test="is_putaway != null and is_putaway != ''" >
+            is_putaway,
+          </if>
+          <if test="status != null and status != ''" >
+            status,
+          </if>
+          <if test="istop != null and istop != ''" >
+            istop,
+          </if>
+          <if test="sort != null and sort != ''" >
+            sort,
+          </if>
+          <if test="room_icon != null and room_icon != ''" >
+            room_icon,
+          </if>
+          <if test="background_music != null and background_music != ''" >
+            background_music,
+          </if>
+          <if test="background_img != null and background_img != ''" >
+            background_img,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="device_id != null and device_id != ''" >
+            #{device_id,jdbcType=BIGINT},
+          </if>
+          <if test="merch_id != null and merch_id != ''" >
+            #{merch_id,jdbcType=BIGINT},
+          </if>
+          <if test="room_code != null and room_code != ''" >
+            #{room_code,jdbcType=VARCHAR},
+          </if>
+          <if test="front_camera_id != null and front_camera_id != ''" >
+            #{front_camera_id,jdbcType=BIGINT},
+          </if>
+          <if test="side_camera_id != null and side_camera_id != ''" >
+            #{side_camera_id,jdbcType=BIGINT},
+          </if>
+          <if test="room_name != null and room_name != ''" >
+            #{room_name,jdbcType=VARCHAR},
+          </if>
+           <if test="room_desc != null and room_desc != ''" >
+            #{room_desc,jdbcType=VARCHAR},
+          </if>
+          <if test="max_user_num != null and max_user_num != ''" >
+            #{max_user_num,jdbcType=BIGINT},
+          </if>
+          <if test="coin_once != null and coin_once != ''" >
+            #{coin_once,jdbcType=INTEGER},
+          </if>
+          <if test="is_private != null and is_private != ''" >
+            #{is_private,jdbcType=CHAR},
+          </if>
+          <if test="is_putaway != null and is_putaway != ''" >
+            #{is_putaway,jdbcType=CHAR},
+          </if>
+          <if test="status != null and status != ''" >
+            #{status,jdbcType=CHAR},
+          </if>
+          <if test="istop != null and istop != ''" >
+            #{istop,jdbcType=INTEGER},
+          </if>
+          <if test="sort != null and sort != ''" >
+            #{sort,jdbcType=INTEGER},
+          </if>
+          <if test="room_icon != null and room_icon != ''" >
+            #{room_icon,jdbcType=VARCHAR},
+          </if>
+          <if test="background_music != null and background_music != ''" >
+            #{background_music,jdbcType=VARCHAR},
+          </if>
+          <if test="background_img != null and background_img != ''" >
+            #{background_img,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+    
+      <insert id="insertRoomMerch" parameterType="com.irandoo.xhep.base.model.RoomMerch" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_room_merch
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="room_id != null and room_id != ''" >
+            room_id,
+          </if>
+          <if test="merch_id != null and merch_id != ''" >
+            merch_id,
+          </if>
+          <if test="merch_num != null and merch_num != ''" >
+            merch_num,
+          </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="room_id != null and room_id != ''" >
+            #{room_id,jdbcType=BIGINT},
+          </if>
+          <if test="merch_id != null and merch_id != ''" >
+            #{merch_id,jdbcType=BIGINT},
+          </if>
+          <if test="merch_num != null and merch_num != ''" >
+            #{merch_num,jdbcType=INTEGER},
+          </if>
+        </trim>
+    </insert>
+    
+     <insert id="insertRoomClassRef" parameterType="com.irandoo.xhep.base.model.RoomClassRef" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_room_class_rel
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="class_id != null and class_id != ''" >
+            class_id,
+          </if>
+          <if test="room_id != null and room_id != ''" >
+            room_id,
+          </if>
+          create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="class_id != null and class_id != ''" >
+            #{class_id,jdbcType=BIGINT},
+          </if>
+          <if test="room_id != null and room_id != ''" >
+            #{room_id,jdbcType=BIGINT},
+          </if>
+          now(),now()
+        </trim>
+    </insert>
+    
+    <update id="updateRoomCodeByRoomId" parameterType="map">
+      UPDATE t_room 
+       set room_code = #{room_code}
+       WHERE id = #{id} 
+    </update>
+    
+    <select id="selputawayByRoomId"  parameterType="long"  resultType="int">
+        SELECT a.is_putaway from t_room  a WHERE a.id = #{id}
+    </select>
+    
+    <select id="selmerch" resultType="com.irandoo.xhep.base.model.Merch">
+        SELECT a.* from t_merch a
+    </select>
+</mapper>

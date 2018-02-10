@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.LoginMapper">
+ <insert id="insert" parameterType="com.irandoo.xhep.base.model.Login" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_login
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="user_id != null and  user_id != ''" >
+            user_id,
+          </if>
+          <if test="user_alias != null and user_alias != ''" >
+            user_alias,
+          </if>
+           <if test="user_name != null and user_name != ''" >
+            user_name,
+          </if>
+          <if test="session_id != null and session_id != ''" >
+            session_id,
+          </if>
+          <if test="login_mode != null and login_mode != ''" >
+            login_mode,
+          </if>
+          <if test="access_token != null and access_token != ''" >
+            access_token,
+          </if>
+          <if test="refresh_token != null and refresh_token != ''" >
+            refresh_token,
+          </if>
+          <if test="authorization != null and authorization != ''" >
+            authorization,
+          </if>
+           <if test="mode_type != null and mode_type != ''" >
+            mode_type,
+          </if>
+           <if test="mode_code != null and mode_code != ''" >
+            mode_code,
+          </if>
+           <if test="login_b_host != null and login_b_host != ''" >
+            login_b_host,
+          </if>
+           <if test="login_s_host != null and login_s_host != ''" >
+            login_s_host,
+          </if>              
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            login_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="user_id != null and user_id != ''" >
+            #{user_id,jdbcType=VARCHAR},
+          </if>
+          <if test="user_alias != null and user_alias != ''" >
+            #{user_alias,jdbcType=VARCHAR},
+          </if>
+          <if test="user_name != null and user_name != ''" >
+            #{user_name,jdbcType=VARCHAR},
+          </if>
+          <if test="session_id != null and session_id != ''" >
+            #{session_id,jdbcType=VARCHAR},
+          </if>
+           <if test="login_mode != null and login_mode != ''" >
+            #{login_mode,jdbcType=VARCHAR},
+          </if>
+          <if test="access_token != null and access_token != ''" >
+            #{access_token,jdbcType=VARCHAR},
+          </if>
+          <if test="refresh_token != null and refresh_token != ''" >
+            #{refresh_token,jdbcType=VARCHAR},
+          </if>
+          <if test="authorization != null and authorization != ''" >
+            #{authorization,jdbcType=VARCHAR},
+          </if>
+          <if test="mode_type != null and mode_type != ''" >
+            #{mode_type,jdbcType=VARCHAR},
+          </if>
+          <if test="mode_code != null and mode_code != ''" >
+            #{mode_code,jdbcType=VARCHAR},
+          </if>
+          <if test="login_b_host != null and login_b_host != ''" >
+            #{login_b_host,jdbcType=VARCHAR},
+          </if>
+          <if test="login_s_host != null and login_s_host != ''" >
+            #{login_s_host,jdbcType=VARCHAR},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+             now()
+        </trim>
+    </insert>
+    <select id="getIdByUserId" parameterType="String" resultType="String">
+       select a.id from t_login a where a.login_time = (select max(login_time) 
+            from t_login where user_id = #{userId});
+    </select>
+    
+    <update id="updateTime" parameterType="map">
+       update t_login set logout_time=#{logout_time} where id=#{id}
+    </update>
+    </mapper>

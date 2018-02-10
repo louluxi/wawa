@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.MealMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Meal" id="MealMap">
+		<id property="id" column="id"/>
+		<result property="price" column="price"/>
+		<result property="doll_coin" column="doll_coin"/>
+		<result property="reward_coin" column="reward_coin"/>
+		<result property="name" column="name"/>
+		<result property="remark" column="remark"/>
+		<result property="status" column="status"/>
+		<result property="validity_start" column="validity_start"/>
+		<result property="validity_end" column="validity_end"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="MealMap">
+		 SELECT a.*,
+		    b.DICTNAME AS stateShow
+		 	FROM t_meal a 
+		 	LEFT JOIN t_dictbuss b ON a.status = b.DICTID AND b.DESCRIPT = '套餐状态'
+			    <where>
+			    	1=1
+			    	<if test="price != null and price != ''" >
+				        AND a.price = #{price}
+				     </if>
+				     <if test="name != null and NAME != ''" >
+				        AND a.name  like '%${name}%'
+				     </if>
+				      <if test="status != null and status != ''" >
+				        AND a.STATUS = #{status}
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_meal a 
+		    <where>
+			    	1=1
+			    	<if test="price != null and price != ''" >
+				        AND a.price = #{price}
+				     </if>
+				     <if test="name != null and NAME != ''" >
+				        AND a.name  like '%${name}%'
+				     </if>
+				      <if test="status != null and status != ''" >
+				        AND a.STATUS = #{status}
+				     </if>
+			    </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_meal WHERE id = #{id}
+    </delete>
+    <select id="getInfoByMealId" parameterType="long" resultType="com.irandoo.xhep.base.model.Meal">
+        SELECT a.*
+            FROM t_meal a 
+         WHERE a.id = #{id}
+    </select>
+    <update id="update" parameterType="com.irandoo.xhep.base.model.Meal">
+        UPDATE t_meal
+        <set>
+          <if test="price != null and price != ''" >
+            price = #{price,jdbcType=BIGINT},
+          </if>
+          <if test="doll_coin != null and doll_coin != ''" >
+            doll_coin = #{doll_coin,jdbcType=BIGINT},
+          </if>
+          <if test="reward_coin != null and doll_coin != ''">
+           reward_coin = #{reward_coin,jdbcType=BIGINT},
+          </if>
+          <if test="name != null and name != ''" >
+            name = #{name,jdbcType=VARCHAR},
+          </if>
+          <if test="remark != null and remark != ''" >
+            remark = #{remark,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null and status != ''" >
+            status = #{status,jdbcType=VARCHAR},
+          </if>
+          <if test="validity_start != null and validity_start != ''" >
+            validity_start = #{validity_start,jdbcType=DATE},
+          </if>
+          <if test="validity_end != null and validity_end != ''" >
+            validity_end = #{validity_end,jdbcType=DATE},
+          </if>
+          <if test="create_time != null and create_time != ''" >
+            create_time = #{create_time,jdbcType=DATE},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=BIGINT},
+          </if>       
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.Meal" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_meal
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="price != null and price != ''" >
+            price,
+          </if>
+          <if test="doll_coin != null and doll_coin != ''" >
+            doll_coin,
+          </if>
+           <if test="reward_coin != null and reward_coin != ''" >
+            reward_coin,
+          </if>
+          <if test="name != null and name != ''" >
+            name,
+          </if>
+          <if test="remark != null and remark != ''" >
+            remark,
+          </if>
+          <if test="status != null and status != ''" >
+            status,
+          </if>
+          <if test="validity_start != null and validity_start != ''" >
+            validity_start,
+          </if>
+          <if test="validity_end != null and validity_end != ''" >
+            validity_end,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="price != null and price != ''" >
+            #{price,jdbcType=BIGINT},
+          </if>
+          <if test="doll_coin != null and doll_coin != ''" >
+            #{doll_coin,jdbcType=BIGINT},
+          </if>
+          <if test="reward_coin != null and reward_coin != ''" >
+            #{reward_coin,jdbcType=BIGINT},
+          </if>
+          <if test="name != null and name != ''" >
+            #{name,jdbcType=VARCHAR},
+          </if>
+           <if test="remark != null and remark != ''" >
+            #{remark,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null and status != ''" >
+            #{status,jdbcType=VARCHAR},
+          </if>
+           <if test="validity_start != null and validity_start != ''" >
+            #{validity_start,jdbcType=DATE},
+          </if>
+          <if test="validity_end != null and validity_end != ''" >
+            #{validity_end,jdbcType=DATE},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=BIGINT},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+</mapper>

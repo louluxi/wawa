@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.HisUserMapper">
+  <!-- 历史人员批量增加 -->	
+  <insert id="insertHisList" parameterType="java.util.List" >
+	 INSERT INTO t_his_user(room_id,user_id,user_name,user_icon,time_in,time_out)
+	 values
+	<foreach collection="list" item="his" index="index" separator="," >
+	 (#{his.room_id},#{his.user_id},#{his.user_name},#{his.user_icon},#{his.time_in},#{his.time_out})
+   </foreach>
+    <!-- 第二种 -->
+	<!-- <foreach close="" collection="list" item="his" index="index" open="" separator=";" >
+        INSERT INTO t_his_user(room_id,user_id,user_name,user_icon,time_in,time_out)
+        VALUES 
+        (#{his.room_id},#{his.user_id},#{his.user_name},#{his.user_icon},#{his.time_in},#{his.time_out})
+	</foreach>  -->
+  </insert>
+</mapper>
+
+

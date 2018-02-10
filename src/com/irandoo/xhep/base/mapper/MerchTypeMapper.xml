@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.MerchTypeMapper">
+	<resultMap type="com.irandoo.xhep.base.model.MerchType" id="MerchTypeMap">
+		<id property="id" column="id"/>
+		<result property="type_code" column="type_code"/>
+		<result property="type_name" column="type_name"/>
+		<result property="type_desc" column="type_desc"/>
+		<result property="parent" column="parent"/>
+		<result property="level" column="level"/>
+		<result property="icon_path" column="icon_path"/>
+		<result property="is_root" column="is_root"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="MerchTypeMap">
+		 SELECT a.*
+		 	FROM t_merch_type a 
+			    <where>
+			    	1=1
+			    	<if test="type_code != null and type_code != ''" >
+				         AND a.type_code  like '%${type_code}%'
+				     </if>
+				     <if test="type_name != null and type_name != ''" >
+				        AND a.type_name  like '%${type_name}%'
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_merch_type a 
+		      <where>
+                    1=1
+                    <if test="type_code != null and type_code != ''" >
+                        AND a.type_code  like '%${type_code}%'
+                     </if>
+                     <if test="type_name != null and type_name != ''" >
+                        AND a.type_name   like '%${type_name}%'
+                     </if>
+                </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_merch_type WHERE id = #{id}
+    </delete>
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.MerchType">
+        SELECT a.*
+            FROM t_merch_type a 
+         WHERE a.id = #{id}
+    </select>
+    <update id="update" parameterType="com.irandoo.xhep.base.model.MerchType">
+        UPDATE t_merch_type
+        <set>
+          <if test="type_code != null and type_code != ''" >
+            type_code = #{type_code,jdbcType=BIGINT},
+          </if>
+          <if test="type_name != null and type_name != ''" >
+            type_name = #{type_name,jdbcType=VARCHAR},
+          </if>
+          <if test="type_desc != null and type_desc != ''" >
+            type_desc = #{type_desc,jdbcType=VARCHAR},
+          </if>
+          <if test="parent != null" >
+            parent = #{parent,jdbcType=BIGINT},
+          </if>
+          <if test="level != null and level != ''" >
+            level = #{level,jdbcType=INTEGER},
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+            icon_path = #{icon_path,jdbcType=VARCHAR},
+          </if>
+          <if test="is_root != null and is_root != ''" >
+            is_root = #{is_root,jdbcType=VARCHAR},
+          </if>
+           <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=VARCHAR},
+          </if>
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.MerchType" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_merch_type
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="type_code != null and type_code != ''" >
+            type_code,
+          </if>
+          <if test="type_name != null and type_name != ''" >
+            type_name,
+          </if>
+          <if test="type_desc != null and type_desc != ''" >
+            type_desc,
+          </if>
+          <if test="parent != null" >
+            parent,
+          </if>
+          <if test="level != null and level != ''" >
+            level,
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+            icon_path,
+          </if>
+          <if test="is_root != null and is_root != ''" >
+            is_root,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+         <if test="type_code != null and type_code != ''" >
+            #{type_code,jdbcType=VARCHAR},
+          </if>
+          <if test="type_name != null and type_name != ''" >
+            #{type_name,jdbcType=VARCHAR},
+          </if>
+          <if test="type_desc != null and type_desc != ''" >
+            #{type_desc,jdbcType=VARCHAR},
+          </if>
+          <if test="parent != null" >
+            #{parent,jdbcType=BIGINT},
+          </if>
+          <if test="level != null and level != ''" >
+            #{level,jdbcType=INTEGER},
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+            #{icon_path,jdbcType=VARCHAR},
+          </if>
+          <if test="is_root != null and is_root != ''" >
+            #{is_root,jdbcType=VARCHAR},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{type_code,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+</mapper>

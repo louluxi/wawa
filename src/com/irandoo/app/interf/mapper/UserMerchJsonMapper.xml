@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.UserMerchJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.UserMerchJson">
+		 SELECT DISTINCT
+			a.id AS id,
+			a.room_id AS roomId,
+			c.room_name AS roomName,
+			a.merch_id AS merchId,
+			d.merch_name AS merchName,
+		    d.icon_path AS merchIcon,
+		    a.grab_id AS grabId,
+		    a.status AS status,
+		    a.recharge_id AS rechargeId,
+		    a.order_id AS orderId,
+		    a.grab_time AS grabTime,
+		    f.update_timestamp AS optionTime,
+		    d.exchange_coin AS couldGetCoin,
+		    e.exchange_coin AS nowGetCoin
+		FROM t_user_merch a
+		LEFT JOIN t_user b ON a.user_id = b.id
+		LEFT JOIN t_room c ON a.room_id = c.id
+		LEFT JOIN t_merch d ON a.merch_id = d.id
+	    LEFT JOIN t_recharge_record e ON a.recharge_id = e.id
+	    LEFT JOIN t_user_order f ON a.order_id = f.id
+		<where>
+	    	 a.user_id = #{userId}
+		     <if test="status != null and status != ''" >
+		        AND a.status = #{status}
+		     </if>
+	    </where>
+		<if test="null != startset and null !=endset">
+		limit #{startset},#{endset}
+		</if>
+	</select>
+	
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.app.interf.json.UserMerchJson">
+		 SELECT a.id,
+			 a.user_id AS userId,
+			 a.room_id AS roomId,
+			 a.merch_id AS merchId,
+			 a.grab_id AS grabId,
+			 a.status,
+			 a.recharge_id AS rechargeId,
+			 a.order_id AS orderId,
+			 a.grab_time AS grabTime
+		FROM t_user_merch a
+		WHERE a.id = #{id}
+	</select>
+	
+	<insert id="insert" parameterType="com.irandoo.app.interf.json.UserMerchJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_user_merch
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	       <if test="userId != null and userId != ''" >
+	        user_id,
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        room_id,
+	      </if>
+	      <if test="merchId != null and merchId != ''" >
+	        merch_id,
+	      </if>
+	      <if test="grabId != null and grabId != ''" >
+	        grab_id,
+	      </if>
+	      <if test="status != null and status != ''" >
+	        status,
+	      </if>
+	      <if test="rechargeId != null and rechargeId != ''" >
+	        recharge_id,
+	      </if>
+	      <if test="orderId != null and orderId != ''" >
+	        order_id,
+	      </if>
+	       grab_time
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	       <if test="userId != null and userId != ''" >
+	        #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        #{roomId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchId != null and merchId != ''" >
+	        #{merchId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="grabId != null and grabId != ''" >
+	        #{grabId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	        #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="rechargeId != null and rechargeId != ''" >
+	        #{rechargeId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderId != null and orderId != ''" >
+	        #{orderId,jdbcType=VARCHAR},
+	      </if>
+	      now()
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.app.interf.json.UserMerchJson">
+		UPDATE t_user_merch
+		<set>
+		  <if test="userId != null and userId != ''" >
+	        user_id = #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        room_id = #{roomId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchId != null and merchId != ''" >
+	        merch_id = #{merchId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="grabId != null and grabId != ''" >
+	        grab_id = #{grabId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	        status = #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="rechargeId != null and rechargeId != ''" >
+	        recharge_id = #{rechargeId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderId != null and orderId != ''" >
+	        order_id = #{orderId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="grabTime != null and grabTime != ''" >
+	        grab_time = #{grabTime,jdbcType=VARCHAR},
+	      </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+</mapper>

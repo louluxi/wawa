@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.sys.mapper.RoleMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Role" id="roleMap">
+		<id property="id" column="id"/>
+		<result property="role_id" column="role_id"/>
+		<result property="role_name" column="role_name"/>
+		<result property="role_desc" column="role_desc"/>
+		<result property="role_type_id" column="role_type_id"/>
+		<result property="level" column="level"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+	</resultMap>
+	
+	<select id="getInfoList" parameterType="map" resultMap="roleMap">
+		 SELECT a.*
+		 	FROM t_role a
+		 	<where>
+			     <if test="role_id != null and role_id != ''" >
+			        AND a.role_id = #{role_id}
+			     </if>
+			     <if test="role_name != null and role_name != ''" >
+			        AND a.role_name = #{role_name}
+			     </if>
+			    </where>
+			order by a.role_id asc
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+			 FROM t_role a 
+	</select>
+	
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Role">
+		SELECT a.*
+		 	FROM t_role a 
+		 WHERE a.id = #{id}
+	</select>
+	
+	<select id="getAllList" parameterType="map" resultMap="roleMap">
+		SELECT a.*
+		 	FROM t_role a
+	 	   <where>
+			     <if test="role_id != null and role_id != ''" >
+			        AND a.role_id = #{role_id}
+			     </if>
+			     <if test="role_name != null and role_name != ''" >
+			        AND a.role_name = #{role_name}
+			     </if>
+		    </where>
+		 order by a.role_id asc 
+	</select>
+	
+	<insert id="insert" parameterType="com.irandoo.xhep.base.model.Role" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_role
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="role_id != null and role_id != ''" >
+	        role_id,
+	      </if>
+	      <if test="role_name != null and role_name != ''" >
+	        role_name,
+	      </if>
+	      <if test="role_desc != null and role_desc != ''" >
+	        role_desc,
+	      </if>
+	      <if test="role_type_id != null and role_type_id != ''" >
+	        role_type_id,
+	      </if>
+	      <if test="level != null and level != ''" >
+	        level,
+	      </if>
+	        update_timestamp
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="role_id != null and role_id != ''" >
+	         #{role_id,jdbcType=VARCHAR},
+	      </if>
+	      <if test="role_name != null and role_name != ''" >
+	         #{role_name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="role_desc != null and role_desc != ''" >
+	         #{role_desc,jdbcType=VARCHAR},
+	      </if>
+	      <if test="role_type_id != null and role_type_id != ''" >
+	         #{role_type_id,jdbcType=INTEGER},
+	      </if>
+	      <if test="level != null and level != ''" >
+	         #{level,jdbcType=INTEGER},
+	      </if>
+	         now()
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.xhep.base.model.Role">
+		UPDATE t_role
+		<set>
+		 <if test="role_id != null and role_id != ''" >
+	         role_id = #{role_id,jdbcType=VARCHAR},
+	      </if>
+	      <if test="role_name != null and role_name != ''" >
+	         role_name = #{role_name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="role_desc != null and role_desc != ''" >
+	         role_desc = #{role_desc,jdbcType=VARCHAR},
+	      </if>
+	      <if test="role_type_id != null and role_type_id != ''" >
+	         role_type_id = #{role_type_id,jdbcType=INTEGER},
+	      </if>
+	      <if test="level != null and level != ''" >
+	         level = #{level,jdbcType=INTEGER},
+	      </if>
+	         update_timestamp = now()
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM t_role WHERE id = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.DeviceJsonMapper">
+	<select id="getDeviceByRoom" parameterType="map" resultType="com.irandoo.app.interf.json.DeviceJson">
+		SELECT a.id,
+		    a.ip,
+		    a.port,
+		    b.id AS roomId,
+			b.coin_once coinOnce
+		    FROM t_device a 
+			INNER JOIN t_room b ON a.id = b.device_id 
+		<where>
+	    	 1 = 1
+		     <if test="roomId != null and roomId != ''" >
+		        AND b.id = #{roomId}
+		     </if>
+		     <if test="type != null and type != ''" >
+		        AND a.device_type = #{type}
+		     </if>
+		     <if test="deviceId != null and deviceId != ''" >
+		        AND a.id = #{deviceId}
+		     </if>
+	    </where>
+	</select>
+</mapper>

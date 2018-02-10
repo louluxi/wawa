@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.support.alipay.mapper.AliPayPrivateRoomMapper">
+    <select id="getInfoById" parameterType="long" resultType="AliPayPrivateRoom">
+        SELECT a.*
+            FROM T_PRIVATE_ROOM a 
+         WHERE a.id = #{room_id}
+    </select>
+</mapper>

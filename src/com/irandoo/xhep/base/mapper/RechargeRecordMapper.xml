@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.RechargeRecordMapper">
+	<resultMap type="com.irandoo.xhep.base.model.RechargeRecord" id="RechargeRecordMap">
+		<id property="id" column="id"/>
+		<result property="room_id" column="room_id"/>
+		<result property="user_id" column="user_id"/>
+		<result property="meal_id" column="meal_id"/>
+		<result property="recharge_order_id" column="recharge_order_id"/>
+		<result property="recharge_user_id" column="recharge_user_id"/>
+		<result property="order_money" column="order_money"/>
+		<result property="exchange_coin" column="exchange_coin"/>
+		<result property="reward_coin" column="reward_coin"/>
+		<result property="pay_type" column="pay_type"/>
+		<result property="pay_money" column="pay_money"/>
+		<result property="type" column="type"/>
+		<result property="recharge_time" column="recharge_time"/>
+		<result property="corp_code" column="corp_code"/>
+		<result property="payStyleShow" column="payStyleShow"/>
+		<result property="payTypeShow" column="payTypeShow"/>
+		<result property="rechargeuserName" column="rechargeuserName"/>
+        <result property="userName" column="userName"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="RechargeRecordMap">
+		 SELECT  a.*,
+	       CASE  WHEN USER_id = a.RECHARGE_USER_id THEN '自充'
+	       ELSE '代充' END as remark,
+	       b.DICTNAME AS payStyleShow,
+	       c.DICTNAME AS payTypeShow,
+	       d.USER_NAME AS rechargeuserName,
+	       e.USER_NAME AS userName
+	       FROM t_recharge_record a
+	       LEFT JOIN t_dictbuss b ON a.PAY_TYPE = b.DICTID AND b.DESCRIPT = '支付方式'
+	       LEFT JOIN t_dictbuss c ON a.type = c.DICTID AND c.DESCRIPT = '充值流水类型'
+	       LEFT JOIN t_user d ON a.recharge_user_id = d.id
+	       LEFT JOIN t_user e ON a.user_id = e.id
+			    <where>
+			    	1=1
+			    	<if test="room_id != null and room_id != ''" >
+				        AND a.room_id like '%${room_id}%'
+				     </if>
+				     <if test="user_id != null and user_id != ''" >
+				          AND a.user_id like '%${user_id}%'
+				     </if>
+				     <if test="recharge_user_id != null and recharge_user_id != ''" >
+				        AND a.recharge_user_id like '%${recharge_user_id}%'
+				     </if>
+				     <if test="pay_type != null and pay_type != ''" >
+                        AND a.pay_type = #{pay_type}
+                     </if>
+                     <if test="type != null and type != ''" >
+                        AND a.type = #{type}
+                     </if>
+                     <if test="meal_id != null and meal_id != ''" >
+                        AND a.meal_id = #{meal_id}
+                     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_recharge_record a 
+		    <where>
+                    1=1
+                    <if test="room_id != null and room_id != ''" >
+                        AND a.room_id like '%${room_id}%'
+                     </if>
+                     <if test="user_id != null and user_id != ''" >
+                          AND a.user_id like '%${user_id}%'
+                     </if>
+                     <if test="recharge_user_id != null and recharge_user_id != ''" >
+                        AND a.recharge_user_id like '%${recharge_user_id}%'
+                     </if>
+                     <if test="pay_type != null and pay_type != ''" >
+                        AND a.pay_type = #{pay_type}
+                     </if>
+                     <if test="type != null and type != ''" >
+                        AND a.type = #{type}
+                     </if>
+                     <if test="meal_id != null and meal_id != ''" >
+                        AND a.meal_id = #{meal_id}
+                     </if>
+                </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_recharge_record WHERE id = #{id}
+    </delete>
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.RechargeRecord">
+        SELECT a.*
+            FROM t_recharge_record a 
+         WHERE a.id = #{id}
+    </select>
+    <update id="update" parameterType="com.irandoo.xhep.base.model.RechargeRecord">
+        UPDATE t_recharge_record
+        <set>
+          <if test="room_id != null and room_id != ''" >
+            room_id = #{price,jdbcType=BIGINT},
+          </if>
+          <if test="user_id != null and user_id != ''" >
+            user_id = #{user_id,jdbcType=BIGINT},
+          </if>
+          <if test="meal_id != null and meal_id != ''" >
+            meal_id = #{meal_id,jdbcType=BIGINT},
+          </if>
+          <if test="recharge_order_id != null and recharge_order_id != ''" >
+            recharge_order_id = #{recharge_order_id,jdbcType=VARCHAR},
+          </if>
+          <if test="recharge_user_id != null and recharge_user_id != ''" >
+            recharge_user_id = #{recharge_user_id,jdbcType=BIGINT},
+          </if>
+          <if test="order_money != null and order_money != ''" >
+            order_money = #{order_money,jdbcType=VARCHAR},
+          </if>
+          <if test="exchange_coin != null and exchange_coin != ''" >
+            exchange_coin = #{exchange_coin,jdbcType=VARCHAR},
+          </if>
+          <if test="reward_coin != null and reward_coin != ''" >
+            reward_coin = #{reward_coin,jdbcType=VARCHAR},
+          </if>
+           <if test="pay_type != null and pay_type != ''" >
+            pay_type = #{pay_type,jdbcType=VARCHAR},
+          </if>
+           <if test="pay_money != null and pay_money != ''" >
+            pay_money = #{pay_money,jdbcType=BIGINT},
+          </if>
+           <if test="type != null and type != ''" >
+            type = #{type,jdbcType=VARCHAR},
+          </if>   
+          <if test="recharge_time != null and recharge_time != ''" >
+            recharge_time = #{recharge_time,jdbcType=DATE},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=BIGINT},
+          </if>       
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.RechargeRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_recharge_record
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="room_id != null and room_id != ''" >
+            room_id,
+          </if>
+          <if test="user_id != null and user_id != ''" >
+            user_id,
+          </if>
+          <if test="meal_id != null and meal_id != ''" >
+            meal_id,
+          </if>
+          <if test="recharge_order_id != null and recharge_order_id != ''" >
+            recharge_order_id,
+          </if>
+          <if test="recharge_user_id != null and recharge_user_id != ''" >
+            recharge_user_id,
+          </if>
+          <if test="order_money != null and order_money != ''" >
+            order_money,
+          </if>
+          <if test="exchange_coin != null and exchange_coin != ''" >
+            exchange_coin,
+          </if>
+          <if test="reward_coin != null and reward_coin != ''" >
+            reward_coin,
+          </if>
+           <if test="pay_type != null and pay_type != ''" >
+            pay_type,
+          </if>
+           <if test="pay_money != null and pay_money != ''" >
+            pay_money,
+          </if>
+           <if test="type != null and type != ''" >
+            type,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            recharge_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="room_id != null and room_id != ''" >
+            #{room_id,jdbcType=BIGINT},
+          </if>
+          <if test="user_id != null and user_id != ''" >
+            #{user_id,jdbcType=BIGINT},
+          </if>
+          <if test="meal_id != null and meal_id != ''" >
+            #{meal_id,jdbcType=BIGINT},
+          </if>
+          <if test="recharge_order_id != null and  recharge_order_id != ''" >
+            #{recharge_order_id,jdbcType=VARCHAR},
+          </if>
+           <if test="recharge_user_id != null and recharge_user_id != ''" >
+            #{recharge_user_id,jdbcType=BIGINT},
+          </if>
+          <if test="order_money != null and order_money != ''" >
+            #{order_money,jdbcType=VARCHAR},
+          </if>
+           <if test="exchange_coin != null and exchange_coin != ''" >
+            #{exchange_coin,jdbcType=VARCHAR},
+          </if>
+          <if test="reward_coin != null and reward_coin != ''" >
+            #{reward_coin,jdbcType=VARCHAR},
+          </if>
+            <if test="pay_type != null and pay_type != ''" >
+            #{pay_type,jdbcType=VARCHAR},
+          </if>
+            <if test="pay_money != null and pay_money != ''" >
+            #{pay_money,jdbcType=BIGINT},
+          </if>
+            <if test="type != null and type != ''" >
+            #{type,jdbcType=VARCHAR},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=BIGINT},
+          </if>
+             now()
+        </trim>
+    </insert>
+    
+    <select id="selMeal" resultType="com.irandoo.xhep.base.model.Meal">
+        SELECT a.* from t_meal a
+    </select>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.support.alipay.mapper.AliPayRechargeRecordMapper">
+     <insert id="insert" parameterType="com.irandoo.support.alipay.model.AliPayRechargeRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_recharge_record
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="room_id != null and room_id != ''" >
+            room_id,
+          </if>
+          <if test="user_id != null and user_id != ''" >
+            user_id,
+          </if>
+          <if test="meal_id != null and meal_id != ''" >
+            meal_id,
+          </if>
+          <if test="recharge_order_id != null and recharge_order_id != ''" >
+            recharge_order_id,
+          </if>
+          <if test="recharge_user_id != null and recharge_user_id != ''" >
+            recharge_user_id,
+          </if>
+          <if test="order_money != null and order_money != ''" >
+            order_money,
+          </if>
+          <if test="exchange_coin != null and exchange_coin != ''" >
+            exchange_coin,
+          </if>
+          <if test="reward_coin != null and reward_coin != ''" >
+            reward_coin,
+          </if>
+           <if test="pay_money != null and pay_money != ''" >
+            pay_money,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            recharge_time,pay_type,type
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="room_id != null and room_id != ''" >
+            #{room_id,jdbcType=BIGINT},
+          </if>
+          <if test="user_id != null and user_id != ''" >
+            #{user_id,jdbcType=BIGINT},
+          </if>
+          <if test="meal_id != null and meal_id != ''" >
+            #{meal_id,jdbcType=BIGINT},
+          </if>
+          <if test="recharge_order_id != null and recharge_order_id != ''" >
+            #{recharge_order_id,jdbcType=VARCHAR},
+          </if>
+           <if test="recharge_user_id != null and recharge_user_id != ''" >
+            #{recharge_user_id,jdbcType=BIGINT},
+          </if>
+          <if test="order_money != null and order_money != ''" >
+            #{order_money,jdbcType=BIGINT},
+          </if>
+           <if test="exchange_coin != null and exchange_coin != ''" >
+            #{exchange_coin,jdbcType=INTEGER},
+          </if>
+          <if test="reward_coin != null and reward_coin != ''" >
+            #{reward_coin,jdbcType=INTEGER},
+          </if>
+            <if test="pay_money != null and pay_money != ''" >
+            #{pay_money,jdbcType=BIGINT},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+             now(),'AliPay',1
+        </trim>
+    </insert>
+    
+</mapper>

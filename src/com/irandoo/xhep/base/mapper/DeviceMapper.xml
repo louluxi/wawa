@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.DeviceMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Device" id="DeviceMap">
+		<id property="id" column="id"/>
+		<result property="device_type" column="device_type"/>
+		<result property="device_code" column="device_code"/>
+		<result property="device_num" column="device_num"/>
+		<result property="batch_num" column="batch_num"/>
+		<result property="device_name" column="device_name"/>
+		<result property="ip" column="ip"/>
+		<result property="port" column="port"/>
+		<result property="communication_type" column="communication_type"/>
+		<result property="price" column="price"/>
+		<result property="origin" column="origin"/>
+		<result property="status" column="status"/>
+		<result property="remark" column="remark"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+		<result property="deviceType" column="deviceType"/>
+        <result property="deviceStruts" column="deviceStruts"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="DeviceMap">
+		 SELECT a.*,
+			b.DICTNAME AS deviceType,
+			c.DICTNAME AS deviceStruts
+			FROM t_device a 
+			LEFT JOIN t_dictbuss b ON a.device_type = b.DICTID AND b.DESCRIPT = '设备类型'
+			LEFT JOIN t_dictbuss c ON a.status = c.DICTID AND c.DESCRIPT = '设备状态'
+			    <where>
+			    	1=1
+			    	<if test="device_type != null and device_type != ''" >
+				        AND a.device_type = #{device_type}
+				     </if>
+				     <if test="device_code != null and device_code != ''" >
+				        AND a.device_code  like '%${device_code}%'
+				     </if>
+				     <if test="device_name != null and device_name != ''" >
+				        AND a.device_name like '%${device_name}%'
+				     </if>
+				      <if test="status != null and status != ''" >
+				        AND a.STATUS = #{status}
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_device a 
+		    <where>
+                1=1
+               <if test="device_type != null and device_type != ''" >
+                   AND a.device_type = #{device_type}
+               </if>
+               <if test="device_code != null and device_code != ''" >
+                    AND a.device_code like '%'||#{device_code}||'%'
+               </if>
+               <if test="device_name != null and device_name != ''" >
+                   AND a.device_name like '%'||#{device_name}||'%'
+               </if>
+               <if test="status != null and status != ''" >
+                   AND a.STATUS = #{status}
+               </if>
+            </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_device WHERE id = #{id}
+    </delete>
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Device">
+        SELECT a.*
+            FROM t_device a 
+         WHERE a.id = #{id}
+    </select>
+    <update id="update" parameterType="com.irandoo.xhep.base.model.Device">
+        UPDATE t_device
+        <set>
+          <if test="device_type != null and device_type != ''" >
+            device_type = #{device_type,jdbcType=VARCHAR},
+          </if>
+          <if test="device_code != null and device_code != ''" >
+            device_code = #{device_code,jdbcType=VARCHAR},
+          </if>
+          <if test="device_num != null and device_num != ''" >
+            device_num = #{device_num,jdbcType=VARCHAR},
+          </if>
+          <if test="batch_num != null and batch_num != ''" >
+            batch_num = #{batch_num,jdbcType=VARCHAR},
+          </if>
+          <if test="device_name != null and device_name != ''" >
+            device_name = #{device_name,jdbcType=VARCHAR},
+          </if>
+          <if test="ip != null and ip != ''" >
+            ip = #{ip,jdbcType=VARCHAR},
+          </if>
+          <if test="port != null and port != ''" >
+            port = #{port,jdbcType=VARCHAR},
+          </if>
+          <if test="communication_type != null and communication_type != ''" >
+            communication_type = #{communication_type,jdbcType=VARCHAR},
+          </if>
+          <if test="price != null and price != ''" >
+            price = #{price,jdbcType=BIGINT},
+          </if>
+          <if test="origin != null and origin != ''" >
+            origin = #{origin,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null and status != ''" >
+            status = #{status,jdbcType=VARCHAR},
+          </if>
+          <if test="remark != null and remark != ''" >
+            remark = #{remark,jdbcType=VARCHAR},
+          </if>
+           <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=VARCHAR},
+          </if>
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.Device" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_device
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="device_type != null and device_type != ''" >
+            device_type,
+          </if>
+          <if test="device_code != null and device_code != ''" >
+            device_code,
+          </if>
+          <if test="device_num != null and device_num != ''" >
+            device_num,
+          </if>
+          <if test="batch_num != null and batch_num != ''" >
+            batch_num,
+          </if>
+          <if test="device_name != null and device_name != ''" >
+            device_name,
+          </if>
+          <if test="ip != null and ip != ''" >
+            ip,
+          </if>
+          <if test="port != null and port != ''" >
+            port,
+          </if>
+          <if test="communication_type != null and communication_type != ''" >
+            communication_type,
+          </if>
+          <if test="price != null and price != ''" >
+            price,
+          </if>
+          <if test="origin != null and origin != ''" >
+            origin,
+          </if>
+          <if test="status != null and status != ''" >
+            status,
+          </if>
+          <if test="remark != null and remark != ''" >
+            remark,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="device_type != null and device_type != ''" >
+            #{device_type,jdbcType=VARCHAR},
+          </if>
+          <if test="device_code != null and device_code != ''" >
+            #{device_code,jdbcType=VARCHAR},
+          </if>
+          <if test="device_num != null and device_num != ''" >
+            #{device_num,jdbcType=VARCHAR},
+          </if>
+          <if test="batch_num != null and batch_num != ''" >
+            #{batch_num,jdbcType=VARCHAR},
+          </if>
+           <if test="device_name != null and device_name != ''" >
+            #{device_name,jdbcType=VARCHAR},
+          </if>
+          <if test="ip != null and ip != ''" >
+            #{ip,jdbcType=VARCHAR},
+          </if>
+          <if test="port != null and port != ''" >
+            #{port,jdbcType=VARCHAR},
+          </if>
+          <if test="communication_type != null and communication_type != ''" >
+            #{communication_type,jdbcType=VARCHAR},
+          </if>
+          <if test="price != null and price != ''" >
+            #{price,jdbcType=BIGINT},
+          </if>
+          <if test="origin != null and origin != ''" >
+            #{origin,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null and status != ''" >
+            #{status,jdbcType=VARCHAR},
+          </if>
+          <if test="remark != null and remark != ''" >
+            #{remark,jdbcType=VARCHAR},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+</mapper>

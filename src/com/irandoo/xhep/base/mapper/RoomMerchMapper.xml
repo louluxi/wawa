@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.RoomMerchMapper">
+	<resultMap type="com.irandoo.xhep.base.model.RoomMerch" id="RoomMerchMap">
+		<id property="id" column="id"/>
+		<result property="room_id" column="room_id"/>
+		<result property="merch_id" column="merch_id"/>
+		<result property="merch_num" column="merch_num"/>
+		<result property="status" column="status"/>
+		<result property="corp_code" column="corp_code"/>
+		<result property="roomName" column="roomName"/>
+		<result property="roomCode" column="roomCode"/>
+		<result property="merchName" column="merchName"/>
+		<result property="className" column="className"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="RoomMerchMap">
+		 SELECT
+			   b.room_name as roomName,
+			   b.room_code  as roomCode,
+			   c.merch_name as merchName,
+			   f.class_name as className,
+			   a.*
+			from t_room_merch a 
+			LEFT JOIN t_room b on a.room_id = b.id
+			LEFT JOIN t_merch c on a.merch_id = c.id
+			LEFT JOIN t_room_class_rel d on b.id =  d.room_id
+			LEFT JOIN t_room_class f on d.class_id = f.id
+			    <where>
+			    	1=1
+			    	<if test="roomCode != null and roomCode != ''" >
+				        AND b.room_code like '%${roomCode}%'
+				     </if>
+				     <if test="roomName != null and roomName != ''" >
+				        AND b.room_name  like '%${roomName}%'
+				     </if>
+				     <if test="merch_num != null and merch_num != ''" >
+				        AND a.merch_num &lt; #{merch_num}
+				     </if>
+				      <if test="classID != null and classID != ''" >
+				        AND d.class_id = #{classID}
+				     </if>
+			    </where>
+			ORDER BY  a.merch_num 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	from t_room_merch a 
+            LEFT JOIN t_room b on a.room_id = b.id
+            LEFT JOIN t_merch c on a.merch_id = c.id
+            LEFT JOIN t_room_class_rel d on b.id =  d.room_id
+            LEFT JOIN t_room_class f on d.class_id = f.id
+		    <where>
+                    1=1
+                    <if test="roomCode != null and roomCode != ''" >
+                        AND b.room_code like '%${roomCode}%'
+                     </if>
+                     <if test="roomName != null and roomName != ''" >
+                        AND b.room_name  like '%${roomName}%'
+                     </if>
+                     <if test="merch_num != null and merch_num != ''" >
+                        AND a.merch_num &lt; #{merch_num}
+                     </if>
+                     <if test="classID != null and classID != ''" >
+                        AND d.class_id = #{classID}
+                     </if>
+                </where>
+	</select>
+	
+</mapper>

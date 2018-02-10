@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="menu" namespace="/menu" extends="struts-default">
+		<action name="toLoadList" class="menuAction" method="toLoadList">
+			<result>/page/base/menuManage.jsp</result>
+		</action>
+		<action name="getInfoById" class="menuAction" method="getInfoById">
+			<result>/page/base/menuCreate.jsp</result>
+		</action>
+		<action name="getAjaxData" class="menuAction" method="getAjaxData" />
+		<action name="saveOrUpdate" class="menuAction" method="saveOrUpdate">
+			<result type="redirect">menu/toLoadList.action</result>
+		</action>
+		<action name="delete" class="menuAction" method="delete" />
+	</package>
+	
+	<package name="role" namespace="/role" extends="struts-default">
+		<action name="getAjaxData" class="roleAction" method="getAjaxData" />
+		<action name="saveOrUpdate" class="roleAction" method="saveOrUpdate">
+			<result type="redirect">role/toLoadList.action</result>
+		</action>
+		<action name="toLoadList" class="roleAction" method="toLoadList">
+			<result>/page/base/roleManage.jsp</result>
+		</action>
+		<action name="getInfoById" class="roleAction" method="getInfoById">
+			<result>/page/base/roleCreate.jsp</result>
+			<result name="distribute">/page/base/roleDistribute.jsp</result>
+		</action>
+		<action name="delete" class="roleAction" method="delete" />
+	</package>
+	
+	<package name="dictionary" namespace="/dictionary" extends="struts-default">
+		<action name="getAjaxData" class="dictionaryAction" method="getAjaxData" />
+		<action name="saveOrUpdate" class="dictionaryAction" method="saveOrUpdate">
+			<result type="redirect">dictionary/toLoadList.action</result>
+		</action>
+		<action name="toLoadList" class="dictionaryAction" method="toLoadList">
+			<result>/page/base/dictionaryManage.jsp</result>
+		</action>
+		<action name="getInfoById" class="dictionaryAction" method="getInfoById">
+			<result>/page/base/dictionaryCreate.jsp</result>
+		</action>
+		<action name="delete" class="dictionaryAction" method="delete" />
+		<action name="getDataByDescript" class="dictionaryAction" method="getDataByDescript" />
+	</package>
+	
+	<package name="user" namespace="/user" extends="struts-default">
+		<action name="toLoadList" class="userAction" method="toLoadList">
+			<result>/page/base/userManage.jsp</result>
+		</action>
+		<action name="getInfoById" class="userAction" method="getInfoById">
+			<result>/page/base/userCreate.jsp</result>
+		</action>
+		<action name="getAjaxData" class="userAction" method="getAjaxData" />
+		<action name="checkCode" class="userAction" method="checkCode" />
+		<action name="saveOrUpdate" class="userAction" method="saveOrUpdate">
+			<result type="redirect">user/toLoadList.action</result>
+		</action>
+		<action name="updateUser" class="userAction" method="updateUser" >
+			<result type="redirect">/sysadmin/index.action</result>
+		</action>
+		<action name="delete" class="userAction" method="delete" />
+		<action name="toImport" class="userAction" method="toImport" >
+			<result>/page/base/userImport.jsp</result>
+		</action>
+		<action name="importData" class="userAction" method="importData" />
+		<action name="exportData" class="userAction" method="exportData" />
+		<action name="download" class="userAction" method="download" />
+		<action name="toRecovery" class="userAction" method="toRecovery" />
+		<action name="getUserRole" class="userAction" method="getUserRole" />
+		<action name="replaceAllIcon" class="userAction" method="replaceAllIcon" />
+	</package>
+		
+	<package name="frequencyCount" namespace="/frequencyCount" extends="struts-default">
+		<action name="getInfoByCountId" class="frequencyCountAction" method="getInfoByCountId" />
+		<action name="getAjaxData" class="frequencyCountAction" method="getAjaxData" />
+		<action name="updateData" class="frequencyCountAction" method="updateData" />
+		<action name="saveData" class="frequencyCountAction" method="saveData" />
+		<action name="getRanking" class="frequencyCountAction" method="getRanking">
+			<result name="Browse">/page/base/browseRanking.jsp</result>
+			<result name="Search">/page/base/searchRanking.jsp</result>
+			<result name="Collection">/page/base/collectionRanking.jsp</result>
+		</action>
+	</package>
+
+	<!-- 设备管理 -->
+	<package name="device" namespace="/device" extends="struts-default">
+	    <action name="toLoadList" class="deviceAction" method="toLoadList">
+            <result>/page/base/deviceManage.jsp</result>
+        </action>
+        <action name="getAjaxData" class="deviceAction" method="getAjaxData" />
+        <action name="delete" class="deviceAction" method="delete" />
+        <action name="getInfoById" class="deviceAction" method="getInfoById">
+            <result>/page/base/deviceCreate.jsp</result>
+        </action>
+        <action name="saveOrUpdate" class="deviceAction" method="saveOrUpdate">
+            <result type="redirect">device/toLoadList.action</result>
+        </action>
+    </package>
+    
+    <!--  商品-->
+    <package name="merch" namespace="/merch" extends="struts-default">
+        <action name="toLoadList" class="merchAction" method="toLoadList">
+            <result>/page/base/merchManage.jsp</result>
+        </action>
+        <action name="getAjaxData" class="merchAction" method="getAjaxData" />
+        <action name="delete" class="merchAction" method="delete" />
+        <action name="getInfoById" class="merchAction" method="getInfoById">
+            <result>/page/base/merchCreate.jsp</result>
+        </action>
+        <action name="saveOrUpdate" class="merchAction" method="saveOrUpdate">
+            <result type="redirect">merch/toLoadList.action</result>
+        </action>
+    </package>
+
+  <!-- 套餐 -->
+     <package name="meal" namespace="/meal" extends="struts-default">
+        <action name="getAjaxData" class="mealAction" method="getAjaxData" />
+        <action name="delete" class="mealAction" method="delete" />
+        <action name="getInfoById" class="mealAction" method="getInfoById">
+            <result>/page/base/mealCreate.jsp</result>
+        </action>
+        <action name="toLoadList" class="mealAction" method="toLoadList">
+			<result>/page/base/mealManage.jsp</result>
+		</action>
+        <action name="saveOrUpdate" class="mealAction" method="saveOrUpdate">
+            <result type="redirect">meal/toLoadList.action</result>
+        </action>
+    </package>
+    
+    <!-- 商品类别 -->
+    <package name="merchType" namespace="/merchType" extends="struts-default">
+        <action name="toLoadList" class="rechargeChannelAction" method="toLoadList">
+            <result>/page/base/merchTypeManage.jsp</result>
+        </action>
+        <action name="getAjaxData" class="merchTypeAction" method="getAjaxData" />
+        <action name="delete" class="merchTypeAction" method="delete" />
+        <action name="getInfoById" class="merchTypeAction" method="getInfoById">
+            <result>/page/base/merchTypeCreate.jsp</result>
+        </action>
+        <action name="saveOrUpdate" class="merchTypeAction" method="saveOrUpdate">
+            <result type="redirect">/page/base/merchTypeManage.jsp</result>
+        </action>
+    </package>
+    
+     <!--轮播图  -->
+    <package name="carousel" namespace="/carousel" extends="struts-default">
+        <action name="toLoadList" class="carouselAction" method="toLoadList">
+            <result>/page/base/carouselManage.jsp</result>
+        </action>
+        <action name="getAjaxData" class="carouselAction" method="getAjaxData" />
+        <action name="delete" class="carouselAction" method="delete" />
+        <action name="getInfoById" class="carouselAction" method="getInfoById">
+            <result>/page/base/carouselCreate.jsp</result>
+        </action>
+        <action name="saveOrUpdate" class="carouselAction" method="saveOrUpdate">
+            <result type="redirect">carousel/toLoadList.action</result>
+        </action>
+    </package>
+    
+    <!-- 充值方式 -->
+     <package name="rechargeChannel" namespace="/rechargeChannel" extends="struts-default">
+       <action name="toLoadList" class="rechargeChannelAction" method="toLoadList">
+            <result>/page/base/rechargeChannelManage.jsp</result>
+        </action>
+        <action name="getAjaxData" class="rechargeChannelAction" method="getAjaxData" />
+        <action name="delete" class="rechargeChannelAction" method="delete" />
+        <action name="getInfoById" class="rechargeChannelAction" method="getInfoById">
+            <result>/page/base/rechargeChannelCreate.jsp</result>
+        </action>
+        <action name="saveOrUpdate" class="rechargeChannelAction" method="saveOrUpdate">
+            <result type="redirect">/page/base/rechargeChannelManage.jsp</result>
+        </action>
+    </package>
+    
+    <!--房间 -->
+    <package name="room" namespace="/room" extends="struts-default">
+       <action name="toLoadList" class="roomAction" method="toLoadList">
+            <result>/page/base/roomManage.jsp</result>
+        </action>
+        <action name="getAjaxData" class="roomAction" method="getAjaxData" />
+        <action name="delete" class="roomAction" method="delete" />
+        <action name="updatePutaway" class="roomAction" method="updatePutaway" />
+        <action name="getInfoById" class="roomAction" method="getInfoById">
+            <result>/page/base/roomCreate.jsp</result>
+        </action>
+        <action name="saveOrUpdate" class="roomAction" method="saveOrUpdate">
+            <result type="redirect">room/toLoadList.action</result>
+        </action>
+         <action name="getAjax" class="roomAction" method="getAjax" />
+    </package>
+    
+   <!-- 会员 -->
+    <package name="member" namespace="/member" extends="struts-default">
+        <action name="getAjaxData" class="memberAction" method="getAjaxData" />
+        <action name="delete" class="memberAction" method="delete" />
+        <action name="getInfoById" class="memberAction" method="getInfoById">
+            <result>/page/base/memberDetail.jsp</result>
+        </action>
+         <action name="toLoadList" class="memberAction" method="toLoadList">
+			<result>/page/base/memberManager.jsp</result>
+		</action>
+    </package>
+    
+    <!-- 充值流水 -->
+     <package name="rechargeRecord" namespace="/rechargeRecord" extends="struts-default">
+        <action name="getAjaxData" class="rechargeRecordAction" method="getAjaxData" />
+        <action name="delete" class="rechargeRecordAction" method="delete" />
+        <action name="getInfoById" class="rechargeRecordAction" method="getInfoById">
+           <!--  <result>/page/base/memberCreate.jsp</result> -->
+        </action>
+         <action name="toLoadList" class="rechargeRecordAction" method="toLoadList">
+			 <result>/page/base/rechargeRecordManage.jsp</result>
+		</action>
+        <action name="saveOrUpdate" class="rechargeRecordAction" method="saveOrUpdate">
+           <!--  <result type="redirect">/page/base/memberManage.jsp</result> -->
+        </action>
+     </package>
+     
+     <!-- 账户 --> 
+     <package name="userAccount" namespace="/userAccount" extends="struts-default">
+        <action name="getAjaxData" class="userAccountAction" method="getAjaxData" />
+        <action name="delete" class="userAccountAction" method="delete" />
+        <action name="getInfoById" class="userAccountAction" method="getInfoById">
+          <!--   <result>/page/base/memberCreate.jsp</result> -->
+        </action>
+         <action name="toLoadList" class="userAccountAction" method="toLoadList">
+			<!-- <result>/page/base/memberManage.jsp</result> -->
+		</action>
+        <action name="saveOrUpdate" class="userAccountAction" method="saveOrUpdate">
+          <!--   <result type="redirect">/page/base/memberManage.jsp</result> -->
+        </action>
+     </package>
+     
+     <!-- 收货地址 -->
+     <package name="userAddress" namespace="/userAddress" extends="struts-default">
+        <action name="getAjaxData" class="userAddressAction" method="getAjaxData" />
+        <action name="delete" class="userAddressAction" method="delete" />
+        <action name="getInfoById" class="userAddressAction" method="getInfoById">
+          <!--   <result>/page/base/memberCreate.jsp</result> -->
+        </action>
+         <action name="toLoadList" class="userAddressAction" method="toLoadList">
+			<!-- <result>/page/base/memberManage.jsp</result> -->
+		</action>
+        <action name="saveOrUpdate" class="userAddressAction" method="saveOrUpdate">
+          <!--   <result type="redirect">/page/base/memberManage.jsp</result> -->
+        </action>
+     </package>
+      
+      <!-- 用户订单 -->
+     <package name="userOrder" namespace="/userOrder" extends="struts-default">
+        <action name="getAjaxData" class="userOrderAction" method="getAjaxData" />
+        <action name="delete" class="userOrderAction" method="delete" />
+        <action name="getInfoById" class="userOrderAction" method="getInfoById">
+           <result>/page/base/userOrderCreate.jsp</result> 
+        </action>
+         <action name="toLoadList" class="userOrderAction" method="toLoadList">
+			<result>/page/base/userOrderManage.jsp</result> 
+		</action>
+        <action name="saveOrUpdate" class="userOrderAction" method="saveOrUpdate">
+           <result type="redirect">userOrder/toLoadList.action</result>
+        </action>
+     </package>
+      
+    <!-- 房间商品表 -->
+    <package name="roomMerch" namespace="/roomMerch" extends="struts-default">
+        <action name="toLoadList" class="roomMerchAction" method="toLoadList">
+            <result>/page/base/roomMerchManage.jsp</result>
+        </action>
+        <action name="getAjaxData" class="roomMerchAction" method="getAjaxData" />
+    </package>
+    
+    <!-- 包房列表 -->
+    <package name="privateRoom" namespace="/privateRoom" extends="struts-default">
+        <action name="toLoadList" class="privateRoomAction" method="toLoadList">
+            <result>/page/base/privateRoomManage.jsp</result>
+        </action>
+        <action name="getAjaxData" class="privateRoomAction" method="getAjaxData" />
+    </package>
+   
+   <!--会员娃娃表  -->
+   <package name="userMerch" namespace="/userMerch" extends="struts-default">
+        <action name="getAjaxData" class="userMerchAction" method="getAjaxData" />
+    </package>
+    
+     <!--反馈意见 -->
+   <package name="feedBack" namespace="/feedBack" extends="struts-default">
+        <action name="getAjaxData" class="feedBackAction" method="getAjaxData" />
+        <action name="delete" class="feedBackAction" method="delete" />
+        <action name="toLoadList" class="feedBackAction" method="toLoadList">
+            <result>/page/base/feedBackManage.jsp</result>
+        </action>
+        
+    </package>
+    
+    <!--房间类别 -->
+    <package name="roomClass" namespace="/roomClass" extends="struts-default">
+        <action name="getAjaxData" class="roomClassAction" method="getAjaxData" />
+        <action name="getInfoById" class="roomClassAction" method="getInfoById">
+           <result>/page/base/roomClassCreate.jsp</result> 
+        </action>
+        <action name="saveOrUpdate" class="roomClassAction" method="saveOrUpdate">
+           <result type="redirect">roomClass/toLoadList.action</result>
+        </action>
+        <action name="toLoadList" class="roomClassAction" method="toLoadList">
+            <result>/page/base/RoomClassManage.jsp</result>
+        </action>
+         <action name="delete" class="roomClassAction" method="delete" />
+    </package>
+
+   <!--app版本管理 -->
+   <package name="version" namespace="/version" extends="struts-default">
+        <action name="getAjaxData" class="verAction" method="getAjaxData" />
+        <action name="delete" class="verAction" method="delete" />
+        <action name="toLoadList" class="verAction" method="toLoadList">
+            <result>/page/base/VersionManage.jsp</result>
+        </action>
+        <action name="getInfoById" class="verAction" method="getInfoById">
+           <result>/page/base/versionCreate.jsp</result> 
+        </action>
+        <action name="updatePutaway" class="verAction" method="updatePutaway" />
+        <action name="saveOrUpdate" class="verAction" method="saveOrUpdate">
+           <result type="redirect">version/toLoadList.action</result>
+        </action>
+    </package>
+</struts>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.UserRoleMapper">
+	<resultMap type="com.irandoo.xhep.base.model.UserRole" id="UserMap">
+		<id property="id" column="id"/>
+		<result property="user_id" column="user_id"/>
+		<result property="role_id" column="role_id"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="UserMap">
+		 SELECT a.*
+		 	FROM t_user_role a 
+			    <where>
+			    	<if test="user_id != null and user_id != ''" >
+				        AND a.user_id = #{user_id}
+				     </if>
+				     <if test="role_id != null and role_id != ''" >
+				        AND a.role_id = #{role_id}
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+			 FROM t_user_role a 
+		    <where>
+		    	<if test="user_id != null and user_id != ''" >
+			        AND a.user_id = #{user_id}
+			     </if>
+			     <if test="role_id != null and role_id != ''" >
+			        AND a.role_id = #{role_id}
+			     </if>
+		    </where>
+	</select>
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.UserRole">
+		SELECT a.*
+		 	FROM t_user_role a 
+		 WHERE a.id = #{id}
+	</select>
+	<select id="getAllList" parameterType="map" resultMap="UserMap">
+		SELECT a.*
+		 	FROM t_user_role a 
+			<where>
+		    	<if test="user_id != null and user_id != ''" >
+			        AND a.user_id = #{user_id}
+			     </if>
+			     <if test="role_id != null and role_id != ''" >
+			        AND a.role_id = #{role_id}
+			     </if>
+		    </where>
+		 order by a.id desc 
+	</select>
+	<insert id="insert" parameterType="com.irandoo.xhep.base.model.UserRole">
+		INSERT INTO t_user_role
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="user_id != null and user_id != ''" >
+	        user_id,
+	      </if>
+	      <if test="role_id != null and role_id != ''" >
+	        role_id,
+	      </if>
+	        update_timestamp
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="user_id != null and user_id != ''" >
+	        #{user_id,jdbcType=INTEGER},
+	      </if>
+	      <if test="role_id != null and role_id != ''" >
+	        #{role_id,jdbcType=INTEGER},
+	      </if>
+	         now()
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.xhep.base.model.UserRole">
+		UPDATE t_user_role
+		<set>
+		  <if test="user_id != null and user_id != ''" >
+	        user_id = #{user_id,jdbcType=INTEGER},
+	      </if>
+	      <if test="role_id != null and role_id != ''" >
+	        role_id = #{role_id,jdbcType=INTEGER},
+	      </if>
+	         update_timestamp = now()
+		</set>
+		WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="long">
+		DELETE FROM t_user_role WHERE id = #{id}
+	</delete>
+	<delete id="deleteByUserId" parameterType="long">
+		DELETE FROM t_user_role WHERE user_id = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.RechargeChannelMapper">
+	<resultMap type="com.irandoo.xhep.base.model.RechargeChannel" id="RechargeChannelMap">
+		<id property="id" column="id"/>
+		<result property="payname" column="payname"/>
+		<result property="remark" column="remark"/>
+		<result property="recv_account" column="recv_account"/>
+		<result property="fee" column="fee"/>
+		<result property="mch_id" column="mch_id"/>
+		<result property="app_id" column="app_id"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="RechargeChannelMap">
+		 SELECT a.*
+		 	FROM t_recharge_channel a 
+			    <where>
+			    	1=1
+				     <if test="payname != null and payname != ''" >
+				        and payname  like "%"#{payname}"%" 
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_recharge_channel a 
+		      <where>
+                    1=1
+                     <if test="payname != null and payname != ''" >
+                        AND a.payname  like '%${payname}%'
+                     </if>
+             </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_recharge_channel WHERE id = #{id}
+    </delete>
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.RechargeChannel">
+        SELECT a.*
+            FROM t_recharge_channel a 
+         WHERE a.id = #{id}
+    </select>
+    <update id="update" parameterType="com.irandoo.xhep.base.model.RechargeChannel">
+        UPDATE t_recharge_channel
+        <set>
+          <if test="payname != null and payname != ''" >
+            payname = #{payname,jdbcType=VARCHAR},
+          </if>
+          <if test="remark != null and remark != ''" >
+            remark = #{remark,jdbcType=VARCHAR},
+          </if>
+          <if test="recv_account != null and recv_account != ''" >
+            recv_account = #{recv_account,jdbcType=VARCHAR},
+          </if>
+          <if test="fee != null and fee != ''" >
+            fee = #{fee,jdbcType=DOUBLE},
+          </if>
+          <if test="mch_id != null and mch_id != ''" >
+            mch_id = #{mch_id,jdbcType=VARCHAR},
+          </if>
+          <if test="app_id != null and app_id != ''" >
+            app_id = #{app_id,jdbcType=VARCHAR},
+          </if>
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.Carousel" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_recharge_channel
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="payname != null and payname != ''" >
+            payname,
+          </if>
+          <if test="remark != null and remark != ''" >
+            remark,
+          </if>
+          <if test="recv_account != null and recv_account != ''" >
+            recv_account,
+          </if>
+          <if test="fee != null and fee != ''" >
+            fee,
+          </if>
+          <if test="mch_id != null and mch_id != ''" >
+            mch_id,
+          </if>
+          <if test="app_id != null and app_id != ''" >
+            app_id,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="payname != null and payname != ''" >
+            #{payname,jdbcType=VARCHAR},
+          </if>
+          <if test="remark != null and remark != ''" >
+            #{remark,jdbcType=VARCHAR},
+          </if>
+          <if test="recv_account != null and recv_account != ''" >
+            #{recv_account,jdbcType=VARCHAR},
+          </if>
+          <if test="fee != null and fee != ''" >
+            #{fee,jdbcType=DOUBLE},
+          </if>
+           <if test="mch_id != null and mch_id != ''" >
+            #{mch_id,jdbcType=VARCHAR},
+          </if>
+           <if test="app_id != null and app_id != ''" >
+            #{app_id,jdbcType=VARCHAR},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+</mapper>

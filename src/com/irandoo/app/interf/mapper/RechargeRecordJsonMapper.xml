@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.RechargeRecordJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.RechargeRecordJson">
+		 SELECT 
+				a.id,
+				a.room_id AS roomId,
+				a.user_id AS userId,
+				a.meal_id AS mealId,
+				a.recharge_order_id AS rechargeOrderId,
+				a.recharge_user_id AS rechargeUserId,
+				b.name AS mealName,
+				c.USER_NAME AS username,
+				a.order_money AS orderMoney,
+				a.exchange_coin AS exchangeCoin,
+				a.reward_coin AS rewardCoin,
+				a.pay_type AS payType,
+				a.pay_money AS payMoney,
+				a.type AS type,
+				a.recharge_time AS rechangeTime
+		FROM t_recharge_record a
+		INNER JOIN t_meal b ON a.meal_id = b.id
+		INNER JOIN t_user c ON a.recharge_user_id = c.id
+		WHERE a.user_id = #{userId}
+		<if test="null != startset and null !=endset">
+		limit #{startset},#{endset}
+		</if>
+	</select>
+	
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.app.interf.json.RechargeRecordJson">
+		 SELECT 
+				a.id,
+				a.room_id AS roomId,
+				a.user_id AS userId,
+				a.meal_id AS mealId,
+				a.recharge_order_id AS rechargeOrderId,
+				a.recharge_user_id AS rechargeUserId,
+				b.name AS mealName,
+				c.USER_NAME AS username,
+				a.order_money AS orderMoney,
+				a.exchange_coin AS exchangeCoin,
+				a.reward_coin AS rewardCoin,
+				a.pay_type AS payType,
+				a.pay_money AS payMoney,
+				a.type AS type,
+				a.recharge_time AS rechangeTime
+		FROM t_recharge_record a
+		INNER JOIN t_meal b ON a.meal_id = b.id
+		INNER JOIN t_user c ON a.recharge_user_id = c.id
+		WHERE a.id = #{id}
+	</select>
+	
+	<insert id="insert" parameterType="com.irandoo.app.interf.json.RechargeRecordJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_recharge_record
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="roomId != null and roomId != ''" >
+	        room_id,
+	      </if>
+	      <if test="userId != null and userId != ''" >
+	        user_id,
+	      </if>
+	      <if test="mealId != null and mealId != ''" >
+	        meal_id,
+	      </if>
+	      <if test="rechargeOrderId != null and rechargeOrderId != ''" >
+	        recharge_order_id,
+	      </if>
+	      <if test="rechargeUserId != null and rechargeUserId != ''" >
+	        recharge_user_id,
+	      </if>
+	      <if test="orderMoney != null and orderMoney != ''" >
+	        order_money,
+	      </if>
+	      <if test="exchangeCoin != null and exchangeCoin != ''" >
+	        exchange_coin,
+	      </if>
+	     <if test="rewardCoin != null and rewardCoin != ''" >
+	        reward_coin,
+	      </if>
+	      <if test="payType != null and payType != ''" >
+	        pay_type,
+	      </if>
+	      <if test="payMoney != null and payMoney != ''" >
+	        pay_money,
+	      </if>
+	      <if test="type != null and type != ''" >
+	        type,
+	      </if>
+	        recharge_time
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	     <if test="roomId != null and roomId != ''" >
+	         #{roomId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="userId != null and userId != ''" >
+	         #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="mealId != null and mealId != ''" >
+	         #{mealId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="rechargeOrderId != null and rechargeOrderId != ''" >
+	         #{rechargeOrderId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="rechargeUserId != null and rechargeUserId != ''" >
+	        #{rechargeUserId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderMoney != null and orderMoney != ''" >
+	         #{orderMoney,jdbcType=VARCHAR},
+	      </if>
+	      <if test="exchangeCoin != null and exchangeCoin != ''" >
+	         #{exchangeCoin,jdbcType=VARCHAR},
+	      </if>
+	     <if test="rewardCoin != null and rewardCoin != ''" >
+	         #{rewardCoin,jdbcType=VARCHAR},
+	      </if>
+	      <if test="payType != null and payType != ''" >
+	         #{payType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="payMoney != null and payMoney != ''" >
+	         #{payMoney,jdbcType=VARCHAR},
+	      </if>
+	      <if test="type != null and type != ''" >
+	         #{type,jdbcType=VARCHAR},
+	      </if>
+	        now()
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.app.interf.json.RechargeRecordJson">
+		UPDATE t_user_order
+		<set>
+		  <if test="orderType != null and orderType != ''" >
+	         orderType = #{orderType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderCode != null and orderCode != ''" >
+	         orderCode = #{orderCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchId != null and merchId != ''" >
+	         merchId = #{merchId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="saleCode != null and saleCode != ''" >
+	         saleCode = #{saleCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	         status = #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="expressNo != null and expressNo != ''" >
+	         expressNo = #{expressNo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="expressCompany != null and expressCompany != ''" >
+	         expressCompany = #{expressCompany,jdbcType=VARCHAR},
+	      </if>
+	      <if test="sendUserId != null and sendUserId != ''" >
+	         sendUserId = #{sendUserId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="userId != null and userId != ''" >
+	         userId = #{userId,jdbcType=VARCHAR}
+	      </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="sysadmin" namespace="/sysadmin" extends="struts-default">
+		<action name="login" class="index" method="login" >
+			<result>/page/sys/main.jsp</result>
+		</action>
+		<action name="getMenus" class="index" method="getMenus">
+			<result>/page/sys/menu.jsp</result>
+		</action>
+		<action name="getUrl" class="index" method="getUrl" />
+		<action name="setTotalCount" class="index" method="setTotalCount" />
+		<action name="loginOut" class="index" method="loginOut" />
+		<action name="checkPass" class="index" method="checkPass" />
+		<action name="toLogin" class="index" method="toLogin">
+			<result>/page/base/login.jsp</result>
+			<result name="index">/page/sys/main.jsp</result>
+		</action>
+		<action name="index" class="index" method="index">
+			<result>/page/sys/main.jsp</result>
+			<result name="front">/page/sys/main.jsp</result>
+		</action>
+		<action name="welcome" class="index" method="welcome">
+			<result>/page/sys/main.jsp</result>
+		</action>
+		<action name="timeOut" class="timeOut" method="timeOut">
+			<result>/page/base/login.jsp</result>
+		</action>
+	</package>
+</struts>

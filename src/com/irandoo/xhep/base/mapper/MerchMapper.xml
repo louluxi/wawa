@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.MerchMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Merch" id="MerchMap">
+		<id property="id" column="id"/>
+		<result property="batch_num" column="batch_num"/>
+		<result property="merch_type_id" column="merch_type_id"/>
+		<result property="merch_name" column="merch_name"/>
+		<result property="icon_path" column="icon_path"/>
+		<result property="merch_desc" column="merch_desc"/>
+		<result property="price" column="price"/>
+		<result property="merch_num" column="merch_num"/>
+		<result property="exchange_coin" column="exchange_coin"/>
+		<result property="origin" column="origin"/>
+		<result property="status" column="status"/>
+		<result property="purchaser" column="purchaser"/>
+		<result property="purchase_time" column="purchase_time"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+		<result property="merch_desc_img" column="merch_desc_img"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="MerchMap">
+		 SELECT a.*,
+			b.DICTNAME AS statusShow,
+			c.type_name AS mechTypeName
+			FROM t_merch a 
+			LEFT JOIN t_dictbuss b ON a.STATUS = b.DICTID AND b.DESCRIPT = '是否'
+			LEFT JOIN t_merch_type c on c.id = a.merch_type_id 
+			    <where>
+			    	1=1
+			    	<if test="merch_name != null and merch_name != ''" >
+				        AND a.merch_name  like '%${merch_name}%'
+				     </if>
+				     <if test="batch_num != null and batch_num != ''" >
+				        AND a.batch_num  like '%${batch_num}%'
+				     </if>
+				     <if test="status != null and status != ''" >
+				        AND a.status = #{status}
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_merch a 
+		      <where>
+                    1=1
+                    <if test="merch_name != null and merch_name != ''" >
+                        AND a.merch_name  like '%${merch_name}%'
+                     </if>
+                     <if test="batch_num != null and batch_num != ''" >
+                        AND a.batch_num  = #{batch_num}
+                     </if>
+                     <if test="status != null and status != ''" >
+                        AND a.status = #{status}
+                     </if>
+                </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_merch WHERE id = #{id}
+    </delete>
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Merch">
+        SELECT a.*
+            FROM t_merch a 
+         WHERE a.id = #{id}
+    </select>
+    <update id="update" parameterType="com.irandoo.xhep.base.model.Merch">
+        UPDATE t_merch
+        <set>
+          <if test="batch_num != null and batch_num != ''" >
+            batch_num = #{batch_num,jdbcType=VARCHAR},
+          </if>
+          <if test="merch_type_id != null and merch_type_id != ''" >
+            merch_type_id = #{merch_type_id,jdbcType=BIGINT},
+          </if>
+          <if test="merch_name != null and merch_name != ''" >
+            merch_name = #{merch_name,jdbcType=VARCHAR},
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+            icon_path = #{icon_path,jdbcType=VARCHAR},
+          </if>
+          <if test="merch_desc != null and merch_desc != ''" >
+            merch_desc = #{merch_desc,jdbcType=VARCHAR},
+          </if>
+          <if test="price != null and price != ''" >
+            price = #{price,jdbcType=BIGINT},
+          </if>
+          <if test="merch_num != null and merch_num != ''" >
+            merch_num = #{merch_num,jdbcType=VARCHAR},
+          </if>
+          <if test="exchange_coin != null and exchange_coin != ''" >
+            exchange_coin = #{exchange_coin,jdbcType=BIGINT},
+          </if>
+          <if test="origin != null and origin != ''" >
+            origin = #{origin,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null and status != ''" >
+            status = #{status,jdbcType=BIGINT},
+          </if>
+          <if test="purchaser != null and purchaser != ''" >
+            purchaser = #{purchaser,jdbcType=VARCHAR},
+          </if>
+          <if test="purchase_time != null and purchase_time != ''" >
+            purchase_time = #{purchase_time,jdbcType=DATE},
+          </if>
+           <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=VARCHAR},
+          </if>
+          <if test="merch_desc_img != null and merch_desc_img != ''" >
+            merch_desc_img = #{merch_desc_img,jdbcType=VARCHAR},
+          </if>
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.Merch" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_merch
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="batch_num != null and batch_num != ''" >
+            batch_num,
+          </if>
+          <if test="merch_type_id != null and merch_type_id != ''" >
+            merch_type_id,
+          </if>
+          <if test="merch_name != null and merch_name != ''" >
+            merch_name,
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+            icon_path,
+          </if>
+          <if test="merch_desc != null and merch_desc != ''" >
+            merch_desc,
+          </if>
+          <if test="price != null and price != ''" >
+            price,
+          </if>
+          <if test="merch_num != null and merch_num != ''" >
+            merch_num,
+          </if>
+          <if test="exchange_coin != null and exchange_coin != ''" >
+            exchange_coin,
+          </if>
+          <if test="origin != null and origin != ''" >
+            origin,
+          </if>
+          <if test="status != null and status != ''" >
+            status,
+          </if>
+          <if test="purchaser != null and purchaser != ''" >
+            purchaser,
+          </if>
+          <if test="purchase_time != null and purchase_time != ''" >
+            purchase_time,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+          <if test="merch_desc_img != null and merch_desc_img != ''" >
+            merch_desc_img,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+         <if test="batch_num != null and batch_num != ''" >
+             #{batch_num,jdbcType=VARCHAR},
+          </if>
+          <if test="merch_type_id != null and merch_type_id != ''" >
+             #{merch_type_id,jdbcType=BIGINT},
+          </if>
+          <if test="merch_name != null and merch_name != ''" >
+             #{merch_name,jdbcType=VARCHAR},
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+             #{icon_path,jdbcType=VARCHAR},
+          </if>
+          <if test="merch_desc != null and merch_desc != ''" >
+             #{merch_desc,jdbcType=VARCHAR},
+          </if>
+          <if test="price != null and price != ''" >
+            #{price,jdbcType=BIGINT},
+          </if>
+          <if test="merch_num != null and merch_num != ''" >
+            #{merch_num,jdbcType=BIGINT},
+          </if>
+          <if test="exchange_coin != null and exchange_coin != ''" >
+            #{exchange_coin,jdbcType=VARCHAR},
+          </if>
+          <if test="origin != null and origin != ''" >
+            #{origin,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null and status != ''" >
+            #{status,jdbcType=VARCHAR},
+          </if>
+          <if test="purchaser != null and purchaser != ''" >
+            #{purchaser,jdbcType=VARCHAR},
+          </if>
+          <if test="purchase_time != null and purchase_time != ''" >
+            #{purchase_time,jdbcType=DATE},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+          <if test="merch_desc_img != null and merch_desc_img != ''" >
+            #{merch_desc_img,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+    <!-- 查询商品，实现商品类别实现下拉 -->
+    <select id="selMerchType" resultType="com.irandoo.xhep.base.model.MerchType"> 
+       SELECT a.*
+           FROM t_merch_type a
+    </select>
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.UserAccountMapper">
+	<resultMap type="com.irandoo.xhep.base.model.UserAccount" id="UserAccountMap">
+		<id property="id" column="id"/>
+		<result property="user_id" column="user_id"/>
+		<result property="account_type" column="account_type"/>
+		<result property="account_name" column="account_name"/>
+		<result property="account_desc" column="account_desc"/>
+		<result property="balance" column="balance"/>
+		<result property="corp_code" column="corp_code"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="UserAccountMap">
+		 SELECT a.*
+		 	FROM t_user_account a 
+			    <where>
+			    	1=1
+			    	<if test="user_id != null and user_id != ''" >
+				        AND a.user_id = #{user_id}
+				     </if>
+				     <if test="name != null and name != ''" >
+				        AND a.account_name  like '%${account_name}%'
+				     </if>
+				      <if test="account_type != null and account_type != ''" >
+				        AND a.account_type = #{account_type}
+				     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_user_account a 
+		    <where>
+			    	1=1
+			    	<if test="user_id != null and user_id != ''" >
+				        AND a.user_id = #{user_id}
+				     </if>
+			    	  <if test="name != null and name != ''" >
+				        AND a.account_name  like '%${account_name}%'
+				     </if>
+				      <if test="account_type != null and account_type != ''" >
+				        AND a.account_type = #{account_type}
+				     </if>
+			    </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_user_account WHERE id = #{id}
+    </delete>
+    <select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.UserAccount">
+        SELECT a.*
+            FROM t_user_account a 
+         WHERE a.id = #{id}
+    </select>
+    
+    <update id="addBalance" parameterType="map">
+		UPDATE t_user_account a SET a.balance =#{balance}+a.balance
+		WHERE user_Id = #{userId} and account_type = #{accountType}
+	</update>
+	
+	<select id="getUserList" resultMap="UserAccountMap">
+	   SELECT * from t_user_account where account_type=2 and balance=0
+	</select>
+	
+    <update id="update" parameterType="com.irandoo.xhep.base.model.UserAccount">
+        UPDATE t_user_account
+        <set>
+          <if test="user_id != null and user_id != ''" >
+            price = #{user_id,jdbcType=BIGINT},
+          </if>
+          <if test="account_type != null and account_type != ''" >
+            account_type = #{account_type,jdbcType=VARCHAR},
+          </if>
+          <if test="account_name != null and account_name != ''" >
+            account_name = #{account_name,jdbcType=VARCHAR},
+          </if>
+          <if test="account_desc != null and account_desc != ''" >
+            account_desc = #{account_desc,jdbcType=VARCHAR},
+          </if>
+          <if test="balance != null and balance != ''" >
+            balance = #{balance,jdbcType=BIGINT},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=VARCHAR},
+          </if>       
+        </set>
+        WHERE id = #{id}
+    </update>
+    <insert id="insert" parameterType="com.irandoo.xhep.base.model.UserAccount" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user_account
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="user_id != null and user_id != ''" >
+            user_id,
+          </if>
+          <if test="account_type != null and account_type != ''" >
+            account_type,
+          </if>
+          <if test="account_name != null and account_name != ''" >
+            account_name,
+          </if>
+          <if test="account_desc != null and account_desc != ''" >
+            account_desc,
+          </if>
+          <if test="balace != null and balace != ''" >
+            balace,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="user_id != null and user_id != ''" >
+            #{user_id,jdbcType=BIGINT},
+          </if>
+          <if test="account_type != null and account_type != ''" >
+            #{account_type,jdbcType=VARCHAR},
+          </if>
+          <if test="account_name != null and account_name != ''" >
+            #{account_name,jdbcType=VARCHAR},
+          </if>
+           <if test="account_desc != null and account_desc != ''" >
+            #{account_desc,jdbcType=VARCHAR},
+          </if>
+          <if test="balace != null and balace != ''" >
+            #{balace,jdbcType=BIGINT},
+          </if>
+           <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>         
+        </trim>
+    </insert>
+    <select id="detectionAccount" resultMap="UserAccountMap">
+       SELECT * from t_user_account where account_type=2 and user_id in (
+          select a.user_id from t_grab_record a where a.grab_time = (select max(grab_time) 
+            from t_grab_record where user_id = a.user_id) and TIMESTAMPDIFF(HOUR,a.grab_time,now()) >= 4
+             order by a.user_id
+        ) 
+    </select>
+</mapper>

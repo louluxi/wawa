@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.sys.mapper.MenuMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Menu" id="MenuMap">
+		<id property="id" column="id"/>
+		<result property="resource_id" column="resource_id"/>
+		<result property="resource_name" column="resource_name"/>
+		<result property="resource_desc" column="resource_desc"/>
+		<result property="resource_type_id" column="resource_type_id"/>
+		<result property="display_order" column="display_order"/>
+		<result property="parent_id" column="parent_id"/>
+		<result property="level" column="level"/>
+		<result property="search_key" column="search_key"/>
+		<result property="perm_id" column="perm_id"/>
+		<result property="url" column="url"/>
+		<result property="target" column="target"/>
+		<result property="is_open" column="is_open"/>
+		<result property="is_show" column="is_show"/>
+		<result property="icon_img" column="icon_img"/>
+		<result property="icon_open_img" column="icon_open_img"/>
+		<result property="is_data_control" column="is_data_control"/>
+		<result property="data_control_constant" column="data_control_constant"/>
+		<result property="data_parent_id" column="data_parent_id"/>
+		<result property="is_root" column="is_root"/>
+		<result property="typeShow" column="typeShow"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+	</resultMap>
+	
+	<select id="getInfoList" parameterType="map" resultMap="MenuMap">
+		 SELECT a.*,b.RESOURCE_TYPE_NAME AS typeShow
+		 	FROM t_resource a
+			LEFT JOIN t_resource_type b ON a.RESOURCE_TYPE_id = b.id
+		 	<where>
+		    	 a.IS_SHOW = 'Y'
+			     <if test="parent_id != null and parent_id != ''" >
+			        AND a.parent_id = #{parent_id}
+			     </if>
+			     <if test="level != null and level != ''" >
+			        AND a.level = #{level}
+			     </if>
+			</where>
+			order by a.display_order asc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+			 FROM t_resource a
+			 LEFT JOIN t_resource_type b ON a.RESOURCE_TYPE_id = b.id
+			 <where>
+		    	 a.IS_SHOW = 'Y'
+			     <if test="parent_id != null and parent_id != ''" >
+			        AND a.parent_id = #{parent_id}
+			     </if>
+			     <if test="level != null and level != ''" >
+			        AND a.level = #{level}
+			     </if>
+			</where>
+	</select>
+	
+	<select id="getAllList" parameterType="map" resultMap="MenuMap">
+		SELECT DISTINCT a.*,b.RESOURCE_TYPE_NAME AS typeShow
+		 	FROM t_resource a
+			LEFT JOIN t_resource_type b ON a.RESOURCE_TYPE_id = b.id
+			<if test="userId != null and userId != ''">
+				INNER JOIN t_role_resource c ON a.id = c.RESOURCE_id AND c.ROLE_id IN (SELECT role_id FROM t_user_role WHERE USER_id = #{userId})
+			</if>
+		 	 <where>
+		    	 a.IS_SHOW = 'Y'
+			     <if test="parent_id != null and parent_id != ''" >
+			        AND a.parent_id = #{parent_id}
+			     </if>
+			     <if test="level != null and level != ''" >
+			        AND a.level = #{level}
+			     </if>
+			     <if test="resource_type_id != null and resource_type_id != ''" >
+			        AND a.resource_type_id IN (${resource_type_id})
+			     </if>
+			</where>
+		 order by a.display_order asc 
+	</select>
+	<insert id="insert" parameterType="com.irandoo.xhep.base.model.Menu">
+		INSERT INTO t_resource
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="resource_name != null and resource_name != ''" >
+	        resource_name,
+	      </if>
+	      <if test="url != null and url != ''" >
+	        url,
+	      </if>
+	      <if test="resource_type_id != null and resource_type_id != ''" >
+	        resource_type_id,
+	      </if>
+	      <if test="parent_id != null and parent_id != ''" >
+	         parent_id,
+	      </if>
+	      <if test="display_order != null and display_order != ''" >
+	        display_order,
+	      </if>
+	      <if test="level != null and level != ''" >
+	        level,
+	      </if>
+	       <if test="icon_img != null and icon_img != ''" >
+	        icon_img,
+	      </if>
+	      <if test="is_show != null and is_show != ''" >
+	        is_show,
+	      </if>
+	        update_timestamp
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="resource_name != null and resource_name != ''" >
+	         #{resource_name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="url != null and url != ''" >
+	         #{url,jdbcType=VARCHAR},
+	      </if>
+	      <if test="resource_type_id != null and resource_type_id != ''" >
+	         #{resource_type_id,jdbcType=INTEGER},
+	      </if>
+	      <if test="parent_id != null and parent_id != ''" >
+	         #{parent_id,jdbcType=INTEGER},
+	      </if>
+	      <if test="display_order != null and display_order != ''" >
+	         #{display_order,jdbcType=INTEGER},
+	      </if>
+	      <if test="level != null and level != ''" >
+	         #{level,jdbcType=INTEGER},
+	      </if>
+	      <if test="icon_img != null and icon_img != ''" >
+	        #{icon_img,jdbcType=VARCHAR},
+	      </if>
+	      <if test="is_show != null and is_show != ''" >
+	         #{is_show,jdbcType=VARCHAR},
+	      </if>
+	         now()
+	    </trim>
+	</insert>
+	
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Menu">
+		SELECT a.*
+		 	FROM t_resource a 
+		 WHERE a.id = #{id}
+	</select>
+	
+	<update id="update" parameterType="com.irandoo.xhep.base.model.Menu">
+		UPDATE t_resource
+		<set>
+		 <if test="resource_name != null and resource_name != ''" >
+	         resource_name = #{resource_name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="url != null and url != ''" >
+	         url = #{url,jdbcType=VARCHAR},
+	      </if>
+	      <if test="resource_type_id != null and resource_type_id != ''" >
+	         resource_type_id = #{resource_type_id,jdbcType=INTEGER},
+	      </if>
+	      <if test="parent_id != null and parent_id != ''" >
+	         parent_id = #{parent_id,jdbcType=INTEGER},
+	      </if>
+	      <if test="display_order != null and display_order != ''" >
+	         display_order = #{display_order,jdbcType=INTEGER},
+	      </if>
+	      <if test="level != null and level != ''" >
+	         level = #{level,jdbcType=INTEGER},
+	      </if>
+	      <if test="icon_img != null and icon_img != ''" >
+	        icon_img = #{icon_img,jdbcType=VARCHAR},
+	      </if>
+	      <if test="is_show != null and is_show != ''" >
+	         is_show = #{is_show,jdbcType=VARCHAR},
+	      </if>
+	         update_timestamp = now()
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM t_resource WHERE id = #{id}
+	</delete>
+	
+	<resultMap type="com.irandoo.xhep.base.model.ZNodesEntity" id="znodesMap">
+		<id property="id" column="id"/>
+		<result property="pId" column="pId"/>
+		<result property="name" column="name"/>
+		<result property="open" column="open"/>
+		<result property="checked" column="checked"/>
+	</resultMap>
+	
+	<select id="getZNodesData" parameterType="map" resultMap="znodesMap">
+		SELECT a.id,IFNULL(a.PARENT_ID,0) AS pId,a.RESOURCE_NAME AS name,IF(b.id IS NULL,'FALSE','TRUE') AS checked,IF(b.id IS NULL,'FALSE','TRUE') AS open
+		 	FROM t_resource a
+			LEFT JOIN t_role_resource b ON a.id = b.RESOURCE_id AND b.ROLE_id = #{roleId}
+			LEFT JOIN t_role c ON b.ROLE_id = c.id 
+			ORDER BY a.LEVEL ASC,a.DISPLAY_ORDER ASC
+	</select>
+	
+</mapper>

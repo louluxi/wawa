@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.CarouselMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Carousel" id="CarouselMap">
+		<id property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="icon_path" column="icon_path"/>
+		<result property="order_num" column="order_num"/>
+		<result property="jump_path" column="jump_path"/>
+		<result property="state" column="state"/>
+		<result property="create_time" column="create_time"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="corp_code" column="corp_code"/>
+		<result property="stateShow" column="stateShow"/>
+	</resultMap>
+	<select id="getInfoList" parameterType="map" resultMap="CarouselMap">
+		 SELECT a.*,
+		    b.DICTNAME AS stateShow
+		 	FROM t_carousel a 
+		 	LEFT JOIN t_dictbuss b ON a.state = b.DICTID AND b.DESCRIPT = '轮播内容状态'
+			    <where>
+			    	1=1
+				     <if test="title != null and title != ''" >
+				        and a.title  like "%"#{title}"%" 
+				     </if>
+				     <if test="state != null and state != ''" >
+                        and a.state  like "%"#{state}"%" 
+                     </if>
+			    </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_carousel a 
+		      <where>
+                    1=1
+                     <if test="title != null and title != ''" >
+                        AND a.title  like '%${title}%'
+                     </if>
+             </where>
+	</select>
+	<delete id="delete" parameterType="long">
+        DELETE FROM t_carousel WHERE id = #{id}
+    </delete>
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Carousel">
+        SELECT a.*
+            FROM t_carousel a 
+         WHERE a.id = #{id}
+    </select>
+     <update id="update" parameterType="com.irandoo.xhep.base.model.Carousel">
+        UPDATE t_carousel
+        <set>
+          <if test="title != null and title != ''" >
+            title = #{title,jdbcType=BIGINT},
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+            icon_path = #{icon_path,jdbcType=VARCHAR},
+          </if>
+          <if test="order_num != null and order_num != ''" >
+            order_num = #{order_num,jdbcType=VARCHAR},
+          </if>
+          <if test="jump_path != null and jump_path != ''" >
+            jump_path = #{jump_path,jdbcType=BIGINT},
+          </if>
+          <if test="state != null" >
+            state = #{state,jdbcType=INTEGER},
+          </if>
+           <if test="corp_code != null and corp_code != ''" >
+            corp_code = #{corp_code,jdbcType=VARCHAR},
+          </if>
+             update_timestamp = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+   <insert id="insert" parameterType="com.irandoo.xhep.base.model.Carousel" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_carousel
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="title != null and title != ''" >
+            title,
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+            icon_path,
+          </if>
+          <if test="order_num != null and order_num != ''" >
+            order_num,
+          </if>
+          <if test="jump_path != null and jump_path != ''" >
+            jump_path,
+          </if>
+          <if test="state != null" >
+            state,
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            corp_code,
+          </if>
+            create_time,update_timestamp
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="title != null and title != ''" >
+            #{title,jdbcType=VARCHAR},
+          </if>
+          <if test="icon_path != null and icon_path != ''" >
+            #{icon_path,jdbcType=VARCHAR},
+          </if>
+          <if test="order_num != null and order_num != ''" >
+            #{order_num,jdbcType=VARCHAR},
+          </if>
+          <if test="jump_path != null and jump_path != ''" >
+            #{jump_path,jdbcType=VARCHAR},
+          </if>
+           <if test="state != null" >
+            #{state,jdbcType=INTEGER},
+          </if>
+          <if test="corp_code != null and corp_code != ''" >
+            #{corp_code,jdbcType=VARCHAR},
+          </if>
+             now(),now()
+        </trim>
+    </insert>
+</mapper>

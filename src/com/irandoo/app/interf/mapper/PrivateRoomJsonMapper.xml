@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.PrivateRoomJsonMapper">
+	
+	 <!-- 包房查询 -->
+	<select id="getPrivateRoom" parameterType="map" resultType="com.irandoo.app.interf.json.PrivateRoomJson">
+		SELECT
+		 a.id as id,
+         a.room_id as roomId,
+         a.creator as creator,
+         a.room_name as roomName,
+         b.room_icon as roomIcon,
+         a.room_type as roomType,
+         a.duration as duration,
+         a.sum_money as sumMoney,
+         b.private_once as coinOnce,
+         c.total as sumPerson 
+         FROM  t_private_room a
+		INNER JOIN t_room b ON a.room_id = b.id
+		LEFT JOIN (SELECT COUNT(1) total,d.room_id FROM t_online_user d GROUP BY room_id) c ON a.room_id = c.room_id
+        where 1=1 and a.status='1'
+        <if test="roomName != null and roomName !=''">
+        And a.room_name like '%${roomName}%'
+		</if>
+		<if test="null != startset and null !=endset">
+		limit #{startset},#{endset}
+		</if>
+	</select>
+	
+	<!-- 我的包房查询 -->
+	<select id="getMyPrivateRoom" parameterType="map" resultType="com.irandoo.app.interf.json.PrivateRoomJson">
+	  select
+		a.id as id,
+	    a.room_id as roomId,
+		a.creator as creator,
+		a.room_name as roomName,
+		b.room_icon as roomIcon,
+		a.room_type as roomType,
+		a.duration as duration,
+		a.sum_money as sumMoney,
+		b.private_once as coinOnce,
+		c.total as sumPerson 
+	FROM  t_private_room a
+		INNER JOIN t_room b ON a.room_id = b.id
+		INNER JOIN (SELECT COUNT(1) total,d.room_id,d.user_name,d.`status` FROM t_online_user d where d.user_id=#{userId} and d.`status` in (2,3,4) GROUP BY room_id) c ON a.room_id = c.room_id
+	where a.status='1'
+	</select>	
+	<!-- 根据包房id获取房间号 -->
+	<select id="getRoomIdById" parameterType="String" resultType="String">
+	 select room_id from t_private_room where  a.status='1'and  id=#{id}
+	</select>
+	<!-- 根据房间id获取房间是否可包 -->
+	<select id="getIsPrivateByRoomId" parameterType="String" resultType="String">
+	   select is_private from t_room where a.status='1' and id=#{id}
+	</select>
+	<!-- 创建包房 -->
+	<insert id="insert"  parameterType="com.irandoo.app.interf.json.PrivateRoomJson" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO t_private_room
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="roomId != null and roomId != ''" >
+	        room_Id,
+	      </if>
+	      <if test="creator != null and creator != ''" >
+	        creator,
+	      </if>
+	      <if test="roomName != null and roomName != ''" >
+	        room_name,
+	      </if>
+	      <if test="roomType != null and roomType != ''" >
+	        room_type,
+	      </if>
+	      <if test="duration != null and duration != ''" >
+	        duration,
+	      </if>
+	      <if test="moneyMinute != null and moneyMinute != ''" >
+	        money_Minute,
+	      </if>
+	      <if test="sumMoney != null and sumMoney != ''" >
+	        sum_money,
+	      </if>
+	      <if test="startTime != null and startTime != ''" >
+	        start_time,
+	      </if>
+	       <if test="endTime != null and endTime != ''" >
+	        end_time,
+	      </if>
+	        CREATE_TIME,
+	        UPDATE_TIMESTAMP
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="roomId != null and roomId != ''" >
+	        #{roomId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creator != null and creator != ''" >
+	        #{creator,jdbcType=VARCHAR},
+	      </if>
+	      <if test="roomName != null and roomName != ''" >
+	        #{roomName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="roomType != null and roomType != ''" >
+	        #{roomType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="duration != null and duration != ''" >
+	        #{duration,jdbcType=VARCHAR},
+	      </if>
+	      <if test="moneyMinute !=null and moneyMinute != ''">
+	        #{moneyMinute,jdbcType=VARCHAR},  
+	      </if>
+	      <if test="sumMoney != null and sumMoney != ''" >
+	        #{sumMoney,jdbcType=VARCHAR},
+	      </if>
+	      <if test="startTime != null and startTime != ''" >
+	        #{startTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="endTime != null and endTime != ''" >
+	        #{endTime,jdbcType=TIMESTAMP},
+	      </if>
+	        now(),
+	        now()
+	    </trim>
+	</insert>
+	<!-- 创建包房信息返回 -->
+	<select id="returnInfo" parameterType="map" resultType="com.irandoo.app.interf.json.PrivateRoomJson">
+		SELECT
+		 a.id as id,
+         a.room_id as roomId,
+         a.creator as creator,
+         a.room_name as roomName,
+         b.room_icon as roomIcon,
+         a.room_type as roomType,
+         a.duration as duration,
+         a.sum_money as sumMoney,
+         b.private_once as coinOnce
+         FROM  t_private_room a
+		INNER JOIN t_room b ON a.room_id = b.id where  b.id=#{id}
+	</select>
+	
+	<!-- 获取包房到期时间 -->
+	<select id="getExpirationDate" resultType="com.irandoo.app.interf.json.PrivateRoomJson">
+	      SELECT
+		 a.id as id,
+         a.room_id as roomId,
+         b.room_code as roomCode,
+         a.start_time as startTime,
+         a.end_time as endTime
+         FROM  t_private_room  a 
+         INNER JOIN t_room b  ON b.id=a.room_id
+         where a.status='1'
+	</select>
+	
+	<!-- 修改包房信息 -->
+	<update id="update" parameterType="com.irandoo.app.interf.json.PrivateRoomJson">
+		UPDATE t_private_room
+		<set>
+		  <if test="roomId != null and roomId != ''" >
+	        room_Id = #{roomId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creator != null and creator != ''" >
+	        creator = #{creator,jdbcType=VARCHAR},
+	      </if>
+	      <if test="roomName != null and roomName != ''" >
+	        room_name = #{roomName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="roomType != null and roomType != ''" >
+	        room_type = #{roomType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="duration != null and duration != ''" >
+	        duration = #{duration,jdbcType=VARCHAR},
+	      </if>
+	      <if test="moneyMinute != null and moneyMinute != ''" >
+	        money_Minute = #{moneyMinute,jdbcType=VARCHAR},
+	      </if>
+	      <if test="sumMoney != null and sumMoney != ''" >
+	        sum_money = #{sumMoney,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	        status = #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="startTime != null and startTime != ''" >
+	        start_time = #{startTime,jdbcType=TIMESTAMP},
+	      </if>
+	       <if test="endTime != null and endTime != ''" >
+	        end_time = #{endTime,jdbcType=TIMESTAMP},
+	      </if>
+	        UPDATE_TIMESTAMP=now()
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	
+</mapper>

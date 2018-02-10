@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.RoomOnlineJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.RoomOnlineJson">
+		SELECT 
+				b.id AS userId,
+				b.USER_CODE AS userCode,
+        		a.user_name AS userName,
+				a.user_icon AS userIcon,
+				a.is_used AS isUsed,
+				b.OPENID AS openId,
+        		b.ADDRESS AS city,
+				b.GENDER AS gender,
+				d.total AS mastNum,
+        		a.status AS status
+		FROM t_online_user a
+		INNER JOIN t_user b ON a.user_id = b.id
+		LEFT JOIN (SELECT COUNT(1) total,c.user_id FROM t_grab_record c ) d ON a.id = d.user_id
+		WHERE a.ROOM_id = #{roomId}
+		<if test="null != startset and null !=endset">
+		limit #{startset},#{endset}
+		</if>
+	</select>
+	<select id="getOnlineSum" parameterType="String" resultType="int">
+	SELECT count(*) from t_online_user a where a.room_id=#{roomId} 
+	</select>
+	
+	<select id="getPesonList" parameterType="map" resultType="com.irandoo.app.interf.json.RoomOnlineJson">
+        SELECT 
+				b.id AS userId,
+				b.USER_CODE AS userCode,
+        		a.user_name AS userName,
+				a.user_icon AS userIcon,
+				a.is_used AS isUsed,
+				b.OPENID AS openId,
+        		b.ADDRESS AS city,
+				b.GENDER AS gender,
+				d.total AS mastNum,
+        		a.status AS status
+		FROM t_online_user a
+		INNER JOIN t_user b ON a.user_id = b.id
+		LEFT JOIN (SELECT COUNT(1) total,c.user_id FROM t_grab_record c ) d ON a.id = d.user_id
+		WHERE a.ROOM_id = #{roomId} ORDER BY a.time_in DESC LIMIT 3
+	</select>
+	
+	
+	<insert id="insert" parameterType="com.irandoo.app.interf.json.RoomOnlineJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_online_user
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="userId != null and userId != ''" >
+	        USER_ID,
+	        USER_NAME,
+	        USER_ICON,
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        ROOM_id,
+	      </if>
+	      	IS_USED,
+	      	STATUS,
+	        TIME_IN
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	     <if test="userId != null and userId != ''" >
+	        (SELECT t_user.id FROM t_user WHERE id =#{userId,jdbcType=VARCHAR} LIMIT 1),
+	        (SELECT t_user.USER_NAME FROM t_user WHERE id =#{userId,jdbcType=VARCHAR} LIMIT 1),
+	        (SELECT t_user.USER_ICON FROM t_user WHERE id =#{userId,jdbcType=VARCHAR} LIMIT 1),
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        #{roomId,jdbcType=VARCHAR},
+	      </if>
+	      	'N',
+	      	2,
+	        now()
+	    </trim>
+	</insert>
+	
+	<insert id="insertHis" parameterType="com.irandoo.app.interf.json.RoomOnlineJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_his_user
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="userCode != null and userCode != ''" >
+	        USER_ID,
+	        USER_NAME,
+	        USER_ICON,
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        ROOM_id,
+	      </if>
+	        TIME_IN,
+	        TIME_OUT
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	     <if test="userId != null and userId != ''" >
+	        (SELECT t_user.id FROM t_user WHERE id =#{userId,jdbcType=VARCHAR} LIMIT 1),
+	        (SELECT t_user.USER_NAME FROM t_user WHERE id =#{userId,jdbcType=VARCHAR} LIMIT 1),
+	        (SELECT t_user.USER_ICON FROM t_user WHERE id =#{userId,jdbcType=VARCHAR} LIMIT 1),
+	      </if>
+	      <if test="roomId != null and roomId != ''" >
+	        #{roomId,jdbcType=VARCHAR},
+	      </if>
+	        now(),
+	        (SELECT a.time_in FROM t_online_user a WHERE a.user_id =#{userCode,jdbcType=VARCHAR} AND a.room_id = #{roomId,jdbcType=VARCHAR} LIMIT 1)
+	    </trim>
+	</insert>
+	
+	<delete id="deleteByUserRoom" parameterType="map">
+		DELETE FROM t_online_user WHERE USER_ID = #{userId} AND ROOM_id = #{roomId} 
+	</delete>
+	
+	<select id="existsUser" parameterType="map" resultType="int">
+	SELECT COUNT(*) from t_online_user where user_id=#{userId} and room_id=#{roomId}
+	</select>
+</mapper>

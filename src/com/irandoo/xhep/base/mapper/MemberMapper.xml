@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.MemberMapper">
+	<resultMap type="com.irandoo.xhep.base.model.Member" id="MemberMap">
+		<id property="id" column="id"/>
+		<result property="user_code" column="user_code"/>
+		<result property="alias" column="alias"/>
+		<result property="invitate_code" column="invitate_code"/>		
+		<result property="user_pwd" column="user_pwd"/>
+		<result property="user_name" column="user_name"/>
+		<result property="business_name" column="business_name"/>
+		<result property="business_email" column="business_email"/>
+		<result property="department" column="department"/>
+		<result property="post" column="post"/>
+		<result property="user_name_pinyin" column="user_name_pinyin"/>
+		<result property="birthday" column="birthday"/> 
+		<result property="address" column="address"/>
+		<result property="zip" column="zip"/> 
+		<result property="tel" column="tel"/>
+		<result property="qq" column="qq"/>
+		<result property="wechat" column="wechat"/>
+		<result property="openid" column="openid"/>
+		<result property="unionid" column="unionid"/>
+		<result property="nick_name" column="nick_name"/>
+		<result property="user_icon" column="user_icon"/>
+		<result property="user_email" column="user_email"/>
+		<result property="user_age" column="user_age"/>
+		<result property="gender" column="gender"/>
+		<result property="user_tel" column="user_tel"/>
+		<result property="check_status" column="check_status"/>
+		<result property="check_method" column="check_method"/>
+		<result property="register_ip" column="register_ip"/>
+		<result property="register_time" column="register_time"/>
+		<result property="register_channel" column="register_channel"/>	
+		<result property="user_address" column="user_address"/>
+		<result property="idtype" column="idtype"/>
+		<result property="idcode" column="idcode"/>
+		<result property="user_nationality" column="user_nationality"/>
+		<result property="user_type" column="user_type"/>
+		<result property="supplier_id" column="supplier_id"/>
+		<result property="status" column="status"/>
+		<result property="expire_date" column="expire_date"/>
+		<result property="create_time" column="create_time"/>
+		<result property="user_corp_id" column="user_corp_id"/>
+		<result property="is_deleted" column="is_deleted"/>
+		<result property="province" column="province"/>
+		<result property="city" column="city"/>
+		<result property="corp_code" column="corp_code"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+		<result property="genderShow" column="genderShow"/>
+        <result property="strutsShow" column="strutsShow"/>
+	</resultMap>
+		<select id="getInfoList" parameterType="map" resultMap="MemberMap">
+		 SELECT a.*,
+		 b.DICTNAME AS genderShow,
+         c.DICTNAME AS strutsShow
+		 	FROM t_user a 
+		 	LEFT JOIN t_dictbuss b ON a.GENDER = b.DICTID AND b.DESCRIPT = '性别'
+            LEFT JOIN t_dictbuss c ON a.STATUS = c.DICTID AND c.DESCRIPT = '用户状态'
+			   <where>
+                USER_TYPE = 4
+                <if test="user_code != null and user_code != ''" >
+                    AND a.user_code like '%${user_code}%'
+                 </if>
+                 <if test="user_pwd != null and user_pwd != ''" >
+                    AND a.user_pwd = #{user_pwd}
+                 </if>
+                 <if test="user_type != null and user_type != ''" >
+                    AND a.user_type like '%${user_type}%'
+                 </if>
+                 <if test="nick_name != null and nick_name != ''" >
+                    AND a.nick_name  like '%${nick_name}%'
+                 </if>
+                 <if test="register_time != null and register_time != ''" >
+                        AND a.register_time  like '%${register_time}%'
+                 </if>
+                 <if test="business_name != null and business_name != ''" >
+                    AND a.business_name like '%${business_name}%'
+                 </if>
+                 <if test="status != null and status != ''" >
+                    AND a.STATUS like '%${status}%'
+                 </if>
+            </where>
+			order by a.id desc 
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		SELECT count(1)
+		 	FROM t_user a 
+		    <where>
+		    	USER_TYPE = 4
+		    	<if test="user_code != null and user_code != ''" >
+			        AND a.user_code like '%${user_code}%'
+			     </if>
+			     <if test="user_pwd != null and user_pwd != ''" >
+			        AND a.user_pwd = #{user_pwd}
+			     </if>
+			     <if test="user_type != null and user_type != ''" >
+			        AND a.user_type like '%${user_type}%'
+			     </if>
+			     <if test="nick_name != null and nick_name != ''" >
+				    AND a.nick_name  like '%${nick_name}%'
+				 </if>
+				 <if test="register_time != null and register_time != ''" >
+				        AND a.register_time  like '%${register_time}%'
+				 </if>
+			     <if test="business_name != null and business_name != ''" >
+			        AND a.business_name like '%${business_name}%'
+			     </if>
+			     <if test="status != null and status != ''" >
+			        AND a.STATUS like '%${status}%'
+			     </if>
+		    </where>
+	</select>
+	<select id="login" parameterType="map" resultType="com.irandoo.xhep.base.model.Member">
+		SELECT a.*
+		 	FROM t_user a 
+		 WHERE a.user_code = #{user_id} AND a.user_pwd = #{user_pwd}
+	</select>
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.xhep.base.model.Member">
+		SELECT a.*
+		 	FROM t_user a 
+		 WHERE a.id = #{id}
+	</select>
+	
+	<select id="getInfoByCode" parameterType="map" resultMap="MemberMap">
+		SELECT a.*
+		 	FROM t_user a 
+		 WHERE a.user_code = #{user_code}
+	</select>
+	<select id="getAllList" parameterType="map" resultMap="MemberMap">
+		 SELECT a.*
+		 	FROM t_user a 
+		<where>
+		    	a.is_deleted = 'N'
+		    	<if test="user_code != null and user_code != ''" >
+			        AND a.user_code like '%${user_code}%'
+			     </if>
+			     <if test="user_pwd != null and user_pwd != ''" >
+			        AND a.user_pwd = #{user_pwd}
+			     </if>
+			     <if test="user_name != null and user_name != ''" >
+			        AND a.user_name = #{user_name}
+			     </if>
+		    </where>
+		 order by a.id desc 
+	</select>
+	<insert id="insert" parameterType="com.irandoo.xhep.base.model.Member" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_user
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="user_code != null and user_code != ''" >
+	        user_code,
+	      </if>
+	      <if test="user_pwd != null and user_pwd != ''" >
+	        user_pwd,
+	      </if>
+	      <if test="user_name != null and user_name != ''" >
+	        user_name,
+	      </if>
+	      <if test="business_name != null and business_name != ''" >
+	        business_name,
+	      </if>
+	      <if test="business_email != null and business_email != ''" >
+	        business_email,
+	      </if>
+	      <if test="department != null and department != ''" >
+	        department,
+	      </if>
+	      <if test="post != null and post != ''" >
+	        post,
+	      </if>
+	      <if test="user_email != null and user_email != ''" >
+	        user_email,
+	      </if>
+	      <if test="gender != null and gender != ''" >
+	        gender,
+	      </if>
+	      <if test="user_tel != null and user_tel != ''" >
+	        user_tel,
+	      </if>
+	      <if test="user_address != null and user_address != ''" >
+	        user_address,
+	      </if>
+	      <if test="user_type != null and user_type != ''" >
+	        user_type,
+	      </if>
+	      <if test="status != null and status != ''" >
+	        status,
+	      </if>
+	        update_timestamp
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="user_code != null and user_code != ''" >
+	        #{user_code,jdbcType=VARCHAR},
+	      </if>
+	      <if test="order_group != null and order_group != ''" >
+	        #{order_group,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_pwd != null and user_pwd != ''" >
+	        #{user_pwd,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_name != null and user_name != ''" >
+	        #{user_name,jdbcType=VARCHAR},
+	      </if>
+	       <if test="business_name != null and business_name != ''" >
+	        #{business_name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="business_email != null and business_email != ''" >
+	        #{business_email,jdbcType=VARCHAR},
+	      </if>
+	      <if test="department != null and department != ''" >
+	        #{department,jdbcType=VARCHAR},
+	      </if>
+	      <if test="post != null and post != ''" >
+	        #{post,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_email != null and user_email != ''" >
+	        #{user_email,jdbcType=VARCHAR},
+	      </if>
+	      <if test="gender != null and gender != ''" >
+	        #{gender,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_tel != null and user_tel != ''" >
+	        #{user_tel,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_address != null and user_address != ''" >
+	        #{user_address,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_type != null and user_type != ''" >
+	        #{user_type,jdbcType=INTEGER},
+	      </if>
+	      <if test="status != null and status != ''" >
+	         #{status,jdbcType=VARCHAR},
+	      </if>
+	         now()
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.xhep.base.model.Member">
+		UPDATE t_user
+		<set>
+		  <if test="user_code != null and user_code != ''" >
+	        user_code = #{user_code,jdbcType=VARCHAR},
+	      </if>
+		  <if test="order_group != null and order_group != ''" >
+	        order_group = #{order_group,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_pwd != null and user_pwd != ''" >
+	        user_pwd = #{user_pwd,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_name != null and user_name != ''" >
+	        user_name = #{user_name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="business_name != null and business_name != ''" >
+	        business_name = #{business_name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="business_email != null and business_email != ''" >
+	        business_email = #{business_email,jdbcType=VARCHAR},
+	      </if>
+	      <if test="department != null and department != ''" >
+	        department = #{department,jdbcType=VARCHAR},
+	      </if>
+	      <if test="post != null and post != ''" >
+	        post = #{post,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_email != null and user_email != ''" >
+	        user_email = #{user_email,jdbcType=VARCHAR},
+	      </if>
+	      <if test="gender != null and gender != ''" >
+	        gender = #{gender,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_tel != null and user_tel != ''" >
+	        user_tel = #{user_tel,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_address != null and user_address != ''" >
+	        user_address = #{user_address,jdbcType=VARCHAR},
+	      </if>
+	      <if test="user_type != null and user_type != ''" >
+	        user_type = #{user_type,jdbcType=INTEGER},
+	      </if>
+	       <if test="status != null and status != ''" >
+	        status = #{status,jdbcType=VARCHAR},
+	      </if>
+	         update_timestamp = now()
+		</set>
+		WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="long">
+		DELETE FROM t_user WHERE id = #{id}
+	</delete>
+</mapper>

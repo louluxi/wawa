@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<constant name="struts.custom.i18n.resources"
+		value="ContentsResources" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.multipart.maxSize" value="100000000" />
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" /> 
+	<constant name="struts.multipart.saveDir" value="/tmp"/> 
+    <include file="baseframe.xml"/>
+    <include file="bussxml/base.xml"/>  
+    <include file="bussxml/appWebInterf.xml"/>  
+</struts>

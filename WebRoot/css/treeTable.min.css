@@ -1,0 +1,31 @@
+ .default_node, .default_active_node {
+	width: 16px;
+	height: 16px;
+	border: medium none;
+	margin: 0;
+	padding: 0;
+	display: inline-block
+}
+
+ .default_active_node {
+	cursor: pointer
+}
+ .default_open, .default_last_open {
+	background: url(../img/allbgs.gif) no-repeat 0 1px;
+	width: 16px
+}
+
+ .default_shut, .default_last_shut {
+	background: url(../img/allbgs.gif) no-repeat -16px 1px;
+	width: 16px
+}
+
+ .default_hover_open, .default_hover_last_open {
+	background: url(../img/allbgs.gif) no-repeat -32px 1px;
+	width: 16px
+}
+
+ .default_hover_shut, .default_hover_last_shut {
+	background: url(../img/allbgs.gif) no-repeat -48px 1px;
+	width: 16px
+}

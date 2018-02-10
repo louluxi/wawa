@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.RoomJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.RoomJson">
+		 SELECT DISTINCT  a.id AS id,
+				a.device_id AS deviceId,
+				a.front_camera_id AS frontId,
+				a.side_camera_id AS sideId,
+				a.room_code AS roomCode,
+				a.room_name AS roomName,
+				a.room_desc AS roomDesc,
+				a.room_icon AS roomIcon,
+				a.background_music AS backgroundMusic,
+				a.background_img AS backgroundImg,
+				a.max_user_num AS maxUserNum,
+				a.coin_once AS coinOnce,
+				a.is_private AS isPrivate,
+				a.status AS status
+		FROM t_room a
+		LEFT JOIN t_room_class_rel b ON a.id = b.room_id
+		<where>
+	    	 a.is_putaway = 1
+		     <if test="state != null and state != ''" >
+		        AND a.status = #{state}
+		     </if>
+		     <if test="typeId != null and typeId != ''" >
+		        AND b.class_id = #{typeId}
+		     </if>
+	    </where>
+		ORDER BY a.istop desc,a.sort asc,a.hot desc 
+		<if test="null != startset and null !=endset">
+		limit #{startset},#{endset}
+		</if>
+	</select>
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.app.interf.json.RoomJson">
+		  SELECT DISTINCT  a.id AS id,
+				a.device_id AS deviceId,
+				a.room_code AS roomCode,
+				a.room_name AS roomName,
+				a.room_desc AS roomDesc,
+				a.room_icon AS roomIcon,
+				a.background_music AS backgroundMusic,
+				a.background_img AS backgroundImg,
+				a.max_user_num AS maxUserNum,
+				a.coin_once AS coinOnce,
+				a.is_private AS isPrivate,
+				a.status AS status,
+				m.merch_desc as merchDesc,
+				m.merch_desc_img as merchDescImg
+		FROM t_room a
+		left join t_merch m on a.merch_id = m.id
+		WHERE a.id = #{id}
+	</select>
+	<update id="update" parameterType="com.irandoo.app.interf.json.RoomJson">
+		UPDATE t_room SET status = #{status}
+		WHERE id = #{id}
+	</update>
+</mapper>

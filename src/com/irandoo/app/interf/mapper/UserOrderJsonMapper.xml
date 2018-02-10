@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.UserOrderJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.UserOrderJson">
+		 SELECT  a.id,
+			a.user_id AS userId,
+			a.order_type AS orderType,
+			a.order_code AS orderCode,
+			a.merch_id AS merchId,
+			a.sale_code AS saleCode,
+			a.address_id AS addressId,
+			a.status,
+			a.express_no AS expressNo,
+			a.express_company AS expressCompany,
+			a.send_user_id AS sendUserId
+			FROM t_user_order a
+		<where>
+	    	 a.user_id = #{userId}
+		     <if test="status != null and status != ''" >
+		        AND a.status = #{status}
+		     </if>
+	    </where>
+		<if test="null != startset and null !=endset">
+		limit #{startset},#{endset}
+		</if>
+	</select>
+	
+	<select id="getInfoById" parameterType="map" resultType="com.irandoo.app.interf.json.UserOrderJson">
+		SELECT  a.id,
+			a.user_id AS userId,
+			a.order_type AS orderType,
+			a.order_code AS orderCode,
+			a.merch_id AS merchId,
+			a.sale_code AS saleCode,
+			a.address_id AS addressId,
+			a.status,
+			a.express_no AS expressNo,
+			a.express_company AS expressCompany,
+			a.send_user_id AS sendUserId
+			FROM t_user_order a
+		WHERE a.id = #{id}
+	</select>
+	
+	<insert id="insert" parameterType="com.irandoo.app.interf.json.UserOrderJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_user_order
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="orderType != null and orderType != ''" >
+	        order_type,
+	      </if>
+	      <if test="orderCode != null and orderCode != ''" >
+	        order_code,
+	      </if>
+	      <if test="merchId != null and merchId != ''" >
+	        merch_id,
+	      </if>
+	      <if test="saleCode != null and saleCode != ''" >
+	        sale_code,
+	      </if>
+	      <if test="status != null and status != ''" >
+	        status,
+	      </if>
+	      <if test="expressNo != null and expressNo != ''" >
+	        express_no,
+	      </if>
+	      <if test="expressCompany != null and expressCompany != ''" >
+	        express_company,
+	      </if>
+	     <if test="sendUserId != null and sendUserId != ''" >
+	        send_user_id,
+	      </if>
+	     <if test="addrId != null and addrId != ''" >
+	        address_id,
+	      </if>
+	      <if test="userId != null and userId != ''" >
+	        user_id,
+	      </if>
+	      create_time,
+	      update_timestamp
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="orderType != null and orderType != ''" >
+	         #{orderType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderCode != null and orderCode != ''" >
+	         #{orderCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchId != null and merchId != ''" >
+	         #{merchId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="saleCode != null and saleCode != ''" >
+	         #{saleCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	         #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="expressNo != null and expressNo != ''" >
+	         #{expressNo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="expressCompany != null and expressCompany != ''" >
+	         #{expressCompany,jdbcType=VARCHAR},
+	      </if>
+	      <if test="sendUserId != null and sendUserId != ''" >
+	         #{sendUserId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="addrId != null and addrId != ''" >
+	       	 #{addrId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="userId != null and userId != ''" >
+	         #{userId,jdbcType=VARCHAR},
+	      </if>
+	      now(),
+	      now()
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.app.interf.json.UserOrderJson">
+		UPDATE t_user_order
+		<set>
+		  <if test="orderType != null and orderType != ''" >
+	         orderType = #{orderType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderCode != null and orderCode != ''" >
+	         orderCode = #{orderCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchId != null and merchId != ''" >
+	         merchId = #{merchId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="saleCode != null and saleCode != ''" >
+	         saleCode = #{saleCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="status != null and status != ''" >
+	         status = #{status,jdbcType=VARCHAR},
+	      </if>
+	      <if test="expressNo != null and expressNo != ''" >
+	         expressNo = #{expressNo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="expressCompany != null and expressCompany != ''" >
+	         expressCompany = #{expressCompany,jdbcType=VARCHAR},
+	      </if>
+	      <if test="sendUserId != null and sendUserId != ''" >
+	         sendUserId = #{sendUserId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="addrId != null and addrId != ''" >
+	       	 address_id = #{addrId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="userId != null and userId != ''" >
+	         userId = #{userId,jdbcType=VARCHAR},
+	      </if>
+	      	update_timestamp = now()
+		</set>
+		WHERE id = #{id}
+	</update>
+</mapper>

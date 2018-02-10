@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.xhep.base.mapper.ResourceTypeMapper">
+	<resultMap type="com.irandoo.xhep.base.model.ResourceType" id="ResourceTypeMap">
+		<id property="id" column="id"/>
+		<result property="resource_type_id" column="resource_type_id"/>
+		<result property="resource_type_name" column="resource_type_name"/>
+		<result property="update_timestamp" column="update_timestamp"/>
+	</resultMap>
+	<select id="getAllList" parameterType="map" resultMap="ResourceTypeMap">
+		 SELECT a.*
+		 	FROM t_resource_type a 
+		 order by a.id desc 
+	</select>
+</mapper>

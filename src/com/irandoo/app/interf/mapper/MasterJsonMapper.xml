@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.MasterJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.MasterJson">
+		SELECT s.*,ss.mastNum AS successNum FROM(
+			SELECT  COUNT(1) AS mastNum,b.OPENID AS openId,b.id AS userId,b.Nick_Name AS userName,b.USER_ICON AS userIcon
+						FROM t_grab_record a
+						INNER JOIN t_user b ON a.user_id = b.id
+						WHERE game_type = 0
+			GROUP BY a.user_id
+			) s
+			LEFT JOIN 
+			(
+			SELECT  COUNT(1) AS mastNum,b.OPENID AS openId,b.id AS userId,b.Nick_Name AS userName,b.USER_ICON AS userIcon
+						FROM t_grab_record a
+						INNER JOIN t_user b ON a.user_id = b.id
+						WHERE game_type = 0 AND a.status = 1
+			GROUP BY a.user_id
+			) ss ON s.userId = ss.userId
+			ORDER BY ss.mastNum DESC
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+</mapper>

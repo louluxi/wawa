@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.UserAddrJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.UserAddrJson">
+		 SELECT a.id,
+				a.country,
+				a.province,
+				a.city,
+				a.area,
+				a.detail,
+				a.receiver,
+				a.is_Default as isDefault,
+				a.tel
+			FROM t_user_address a
+		WHERE a.user_id = #{userId}
+		<!-- <if test="null != startset and null !=endset">
+		limit #{startset},#{endset}
+		</if> -->
+	</select>
+	
+	<insert id="insert" parameterType="com.irandoo.app.interf.json.UserAddrJson" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_user_address
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="userId != null and userId != ''" >
+	        USER_id,
+	      </if>
+	      <if test="country != null and country != ''" >
+	        COUNTRY,
+	      </if>
+	      <if test="province != null and province != ''" >
+	        PROVINCE,
+	      </if>
+	      <if test="city != null and city != ''" >
+	        CITY,
+	      </if>
+	      <if test="area != null and area != ''" >
+	        AREA,
+	      </if>
+	      <if test="detail != null and detail != ''" >
+	        DETAIL,
+	      </if>
+	      <if test="receiver != null and receiver != ''" >
+	        RECEIVER,
+	      </if>
+	      <if test="tel != null and tel != ''" >
+	        TEL,
+	      </if>
+	     <if test="isDefault != null and isDefault != ''" >
+	        IS_DEFAULT,
+	      </if>
+	      <!--  <if test="corp_code != null and user_email != ''" >
+	        IS_DEFAULT,
+	      </if> -->
+	        CREATE_TIME,
+	        UPDATE_TIMESTAMP
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="userId != null and userId != ''" >
+	        #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="country != null and country != ''" >
+	        #{country,jdbcType=VARCHAR},
+	      </if>
+	      <if test="province != null and province != ''" >
+	        #{province,jdbcType=VARCHAR},
+	      </if>
+	      <if test="city != null and city != ''" >
+	        #{city,jdbcType=VARCHAR},
+	      </if>
+	      <if test="area != null and area != ''" >
+	        #{area,jdbcType=VARCHAR},
+	      </if>
+	      <if test="detail != null and detail != ''" >
+	        #{detail,jdbcType=VARCHAR},
+	      </if>
+	      <if test="receiver != null and receiver != ''" >
+	        #{receiver,jdbcType=VARCHAR},
+	      </if>
+	      <if test="tel != null and tel != ''" >
+	        #{tel,jdbcType=VARCHAR},
+	      </if>
+	       <if test="isDefault != null and isDefault != ''" >
+	        #{isDefault,jdbcType=VARCHAR},
+	      </if>
+	      <!--<if test="corp_code != null and user_email != ''" >
+	        IS_DEFAULT,
+	      </if> -->
+	        now(),
+	        now()
+	    </trim>
+	</insert>
+	
+	<update id="update" parameterType="com.irandoo.app.interf.json.UserAddrJson">
+		UPDATE t_user_address
+		<set>
+		  <if test="userId != null and userId != ''" >
+	        USER_ID = #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="country != null and country != ''" >
+	        COUNTRY = #{country,jdbcType=VARCHAR},
+	      </if>
+	      <if test="province != null and province != ''" >
+	        PROVINCE = #{province,jdbcType=VARCHAR},
+	      </if>
+	      <if test="city != null and city != ''" >
+	        CITY = #{city,jdbcType=VARCHAR},
+	      </if>
+	      <if test="area != null and area != ''" >
+	        AREA = #{area,jdbcType=VARCHAR},
+	      </if>
+	      <if test="detail != null and detail != ''" >
+	        DETAIL = #{detail,jdbcType=VARCHAR},
+	      </if>
+	      <if test="receiver != null and receiver != ''" >
+	        RECEIVER = #{receiver,jdbcType=VARCHAR},
+	      </if>
+	      <if test="isDefault != null and isDefault != ''" >
+	        is_DEFAULT= #{isDefault,jdbcType=VARCHAR},
+	      </if>
+	      <if test="tel != null and tel != ''" >
+	        TEL = #{tel,jdbcType=VARCHAR},
+	      </if>
+	         UPDATE_TIMESTAMP = now()
+		</set>
+		WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="long">
+		DELETE FROM t_user_address WHERE id = #{id}
+	</delete>
+	
+</mapper>

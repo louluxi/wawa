@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.RoomTypeJsonMapper">
+	  <resultMap type="com.irandoo.app.interf.json.RoomTypeJson" id="roomTymap">
+         <id column="id" property="id"/>
+         <result column="className" property="className"/>
+         <result column="classIcon" property="classIcon"/>
+     </resultMap>
+
+	<select id="getAllList" parameterType="map" resultMap="roomTymap">
+		 SELECT a.id AS id, 
+	        a.class_name AS className,  
+	        a.class_icon AS classIcon
+		FROM t_room_class a
+		ORDER BY a.class_sort DESC
+	</select>	
+</mapper>

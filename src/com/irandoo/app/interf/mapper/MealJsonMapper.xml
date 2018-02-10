@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.irandoo.app.interf.mapper.MealJsonMapper">
+	<select id="getAllList" parameterType="map" resultType="com.irandoo.app.interf.json.MealJson">
+		 SELECT 
+				a.id,
+				a.name,
+				a.remark,
+				a.price,
+				a.reward_coin as rewardCoin,
+				a.doll_coin AS dollCoin		
+			FROM t_meal a where a.status=1
+			<if test="null != startset and null !=endset">
+			limit #{startset},#{endset}
+			</if>
+	</select>
+</mapper>

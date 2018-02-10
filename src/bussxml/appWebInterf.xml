@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="appWebInterf" namespace="/api" extends="struts-default">
+		<action name="getImgList" class="carouselJsonAction" method="getImgList" />
+		<action name="getHomeRoomList" class="roomTypeJsonAction" method="getHomeRoomList" />
+		<action name="getRoomList" class="roomJsonAction" method="getRoomList" />
+		<action name="getRoomState" class="roomJsonAction" method="getRoomState" />
+		<action name="enterRoom" class="roomJsonAction" method="enterRoom" />
+		<action name="outRoom" class="roomJsonAction" method="outRoom" />
+		<action name="getRoomOnline" class="roomOnlineJsonAction" method="getRoomOnline" />
+		<action name="getMerchDetail" class="merchJsonAction" method="getMerchDetail" />
+		<action name="getRoomGrab" class="roomGrabJsonAction" method="getRoomGrab" />
+		<action name="getMaster" class="masterJsonAction" method="getMaster" />
+		<action name="login" class="userJsonAction" method="login" />
+		<action name="getUserDetail" class="userJsonAction" method="getUserDetail" />
+		<action name="getRechargeRecord" class="rechargeRecordJsonAction" method="getRechargeRecord" />
+		<action name="getUserMerch" class="userMerchJsonAction" method="getUserMerch" />
+		<action name="getUserAddr" class="userAddrJsonAction" method="getUserAddr" />
+		<action name="createUserAddr" class="userAddrJsonAction" method="createUserAddr" />
+		<action name="updateUserAddr" class="userAddrJsonAction" method="updateUserAddr" />
+		<action name="deleteUserAddr" class="userAddrJsonAction" method="deleteUserAddr" />
+		<action name="sendMessage" class="userJsonAction" method="sendMessage" />
+		<action name="bindPhone" class="userJsonAction" method="bindPhone" />
+		<action name="getMeal" class="mealJsonAction" method="getMeal" />
+		<action name="getFeedbackList" class="feedbackJsonAction" method="getFeedbackList" />
+		<action name="createFeedback" class="feedbackJsonAction" method="createFeedback" />
+		<action name="startGame" class="gameStartJsonAction" method="startGame" />
+		<action name="getRoomDetail" class="roomJsonAction" method="getRoomDetail" />
+		<action name="commitInvitateCode" class="userJsonAction" method="commitInvitateCode" />
+		<action name="changeDollToCoin" class="userJsonAction" method="changeDollToCoin" />
+		<action name="getRoomBarrage" class="roomBarrageJsonAction" method="getRoomBarrage" />
+		<action name="setRoomBarrage" class="roomBarrageJsonAction" method="setRoomBarrage" />
+		<action name="submitOrder" class="userOrderJsonAction" method="submitOrder" />
+		<action name="userAccount" class="userJsonAction" method="userAccount" />
+		
+		<!-- 包房 -->
+		<action name="getPrivateRoom" class="privateRoomJsonAction" method="getPrivateRoom"></action>
+	    <action name="getMyPrivateRoom" class="privateRoomJsonAction" method="getMyPrivateRoom"></action>    
+	    <action name="getPrivateOnlinePerson"  class="privateRoomOnlineJsonAction" method="getPrivateOnlinePerson"></action>
+	    <action name="userCheck"  class="privateRoomOnlineJsonAction" method="userCheck"></action>
+	    <action name="kickedUser" class="privateRoomOnlineJsonAction" method="kickedUser"></action>
+	    <action name="applyJoin" class="privateRoomOnlineJsonAction" method="applyJoin"></action>
+	    <action name="privateRoomMoneys" class="privateRoomMoneyAction" method="privateRoomMoneys"></action>
+	    <action name="createPrivateRoom" class="privateRoomJsonAction" method="createPrivateRoom"></action>
+	    <action name="setRoomState" class="roomJsonAction" method="setRoomState"></action>
+	   <!-- 支付宝支付 -->
+	    <action name="payAuth" class="alipayAction" method="payAuth"></action>
+	    <action name="test" class="alipayTest" method="test"></action>
+	   <!-- 微信支付 --> 
+	   <action name="wxPay" class="wechatPayAction" method="wxPay"></action>  
+	   <action name="appLoginOut" class="appLoginAction" method="appLoginOut"></action>
+	   <action name="lastVersion" class="versionAction" method="lastVersion"></action>
+	   <action name="testGame" class="versionAction" method="testGame" ></action>
+	   <action name="getRoomTypeList" class="roomTypeJsonAction" method="getRoomTypeList" />
+	</package>
+	
+	<package name="appWebInterftrue" namespace="/auth" extends="struts-default">
+	  <!-- 登录,授权 -->
+	 <action name="refresh" class="jwtAuthAction" method="refresh"></action>
+	 <action name="appLogin" class="loginJwtAuthAction" method="appLogin"></action>
+	 <!-- 微信支付回调 -->
+	 <action name="getnotify" class="wechatPayAction" method="getnotify"></action>
+	 <!-- 支付宝回调 -->
+	 <action name="alipayCallback" class="alipayAction" method="alipayCallback"></action>
+	</package>
+</struts>

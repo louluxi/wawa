@@ -1,0 +1,113 @@
+.info{
+	width: 46%;
+	height: 46%;
+}
+
+.left{
+	float: left;
+}
+
+.right{
+	float: right;
+}
+
+.top{
+	margin-top: 59px;
+}
+
+.titleArea{
+	width: 100%;
+}
+
+.more{
+	text-decoration: none;
+	color: black;
+}
+
+.tableArea{
+	width: 100%;
+	position: relative;
+    top: 23px;
+    border: 1px solid #03a9f4;
+}
+
+.line{
+	height: 26px;
+	width: 100%;
+}
+
+.linecolor{
+	background-color: #ececec;
+}
+
+.icon{
+	width: 14px;
+    height: 23px;
+    margin-left: 10px;
+}
+
+.column{
+	height: 26px;
+}
+
+.iconcolumn{
+	width: 18%;
+	margin-left: -62px;
+}
+
+.iconaddcolumn{
+	margin-left: 2px;
+}
+
+.keycolumn{
+	width: 10%;
+}
+
+.key{
+	padding-left: 3px;
+}
+
+.blank{
+	width: 14%;
+	border-color: white; 
+}
+
+.date{
+	width: 17%;
+}
+
+.date span{
+	
+}
+
+.blue{
+	background-color: blue;
+}
+
+.triangle{
+	width:0; 
+    height:0; 
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-bottom:9px solid #fff;
+    position: relative;
+    top: 14px;
+}
+
+.trianglecolor{
+	width:0; 
+    height:0; 
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-bottom:9px solid #ececec;
+    position: relative;
+    top: 14px;
+}
+
+.num{
+	color: white;
+    position: relative;
+    bottom: 25px;
+    left: 13px;
+    font-size: 10px;
+}
